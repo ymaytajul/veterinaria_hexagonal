@@ -18,15 +18,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-// Usamos safeLoad() para que no lance error si el archivo .env no existe en Railway
-$dotenv->safeLoad();
+
 
 // Dependencias
 $pdo = new PDO(
     "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}",
     $_ENV['DB_USER'],
-    $_ENV['DB_PASS']
+    $_ENV['DB_PASSWORD']
 );
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
