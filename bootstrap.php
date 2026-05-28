@@ -22,9 +22,9 @@ use Dotenv\Dotenv;
 
 // Dependencias
 $pdo = new PDO(
-    "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}",
-    $_ENV['DB_USER'],
-    $_ENV['DB_PASSWORD']
+    "mysql:host=" . getenv('DB_HOST') . ";port=" . getenv('DB_PORT') . ";dbname=" . getenv('DB_NAME'),
+    getenv('DB_USER'),
+    getenv('DB_PASSWORD')
 );
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
