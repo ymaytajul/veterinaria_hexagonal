@@ -1,4 +1,28 @@
-## Tabla de Vinculación Arquitectónica - Laboratorio 6
+# Veterinaria Hexagonal - MVP v1.1
+
+## 1. Justificación de la Arquitectura
+El proyecto implementa una **Arquitectura Hexagonal** pura, donde el dominio (`domain/`) se encuentra estrictamente aislado de la infraestructura (`infrastructure/`). 
+* La integridad arquitectónica se verifica mediante el análisis estático, comprobando que el dominio no posee dependencias inversas hacia capas externas.
+
+## 2. Integración Continua (Pipeline CI/CD)
+El flujo automatizado en `.github/workflows/test.yml` garantiza la calidad mediante 6 stages optimizados (de rápido a lento):
+1. **Lint:** Análisis de estilo y sintaxis estática.
+2. **Build:** Compilación e instalación de dependencias.
+3. **Unit Test:** Ejecución de pruebas unitarias aisladas del dominio.
+4. **Integration Test:** Ejecución de flujos lógicos con infraestructura.
+5. **Coverage Gate:** Validación de cobertura (mínimo 80% en módulos de dominio).
+6. **Mutation Testing:** Evaluación cualitativa con Infection PHP.
+   * **Justificación del Umbral:** Se ha configurado un umbral de mutación (`--min-msi=70`). Basado en los hallazgos de la S07, este umbral representa el equilibrio óptimo entre el rigor analítico de los asserts y el costo computacional en el runner de integración continua.
+
+## 3. Instrucciones de Ejecución
+* **Instalación Inicial:** Ejecutar `composer install`
+* **Validación Local Completa:** Ejecutar `composer test` (Este alias ejecuta la suite unificada: PHPUnit, Behat e Infection).
+* **CI/CD:** Cada evento `push` o `pull request` dispara automáticamente el pipeline en GitHub Actions.
+
+---
+
+## 4. Vinculación Arquitectónica (SWEBOK) - Laboratorio 6
+Los escenarios de prueba utilizan técnicas de **caja negra** (BDD) para validar requisitos sin dependencia de la implementación interna.
 
 | Nombre del Escenario | Puerto Primario Invocado | Técnica SWEBOK |
 |----------------------|--------------------------|----------------|
@@ -20,12 +44,4 @@
 | Escenario | Puerto Primario | Adaptador Primario | Caso de Uso |
 |-----------|-----------------|-------------------|--------------|
 | Gestionar citas | `GestionCitas` | `CitaController` | `GestionCitasImpl` |
-| Registrar mascota | `GestionMascotas` | `MascotaController` | (Pendiente) |
-
-### Nota sobre la técnica SWEBOK
-
-Todos los escenarios utilizan **pruebas de caja negra** porque:
-- Se basan exclusivamente en los requisitos de negocio (Given-When-Then)
-- No dependen de la implementación interna
-- Validan entradas y salidas sin conocer el código fuente
-- Se alinean con la especificación de comportamiento (BDD)
+| Registrar mascota | `GestionMascotas` | `MascotaController`| (Pendiente) |
