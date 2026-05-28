@@ -1,2 +1,23 @@
+# Dependencias
 /vendor/
+
+# Environment variables
 .env
+
+# Logs
+*.log
+
+# Cache
+/cache/
+/tmp/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Composer
+composer.lock
