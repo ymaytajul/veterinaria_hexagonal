@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Mascotas | Mis Patitas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 1000;
+            padding: 16px 32px;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            cursor: pointer;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo p {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .btn-outline {
+            border: 2px solid #3b82f6;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary-nav {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 32px 60px;
+            background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1f2937, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sección de Productos */
+        .products-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 32px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 48px;
+            font-size: 18px;
+        }
+
+        /* Grid de productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #e5e7eb;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+        }
+
+        .product-image i {
+            font-size: 64px;
+            color: #9ca3af;
+        }
+
+        .product-content {
+            padding: 24px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .product-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .btn-agregar {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-agregar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 60px 32px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+        }
+
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col p {
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #9ca3af;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .footer-bottom a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <h1><i class="fas fa-paw"></i> Mis Patitas</h1>
+                <p>Servicios de Veterinaria | Tienda de Mascotas</p>
+            </div>
+            <div class="nav-links">
+                <a onclick="window.location.href='index.html'">Inicio</a>
+                <a onclick="window.location.href='servicios.html'">Servicios</a>
+                <a onclick="window.location.href='tienda.html'">Tienda</a>
+                <a onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contacto</a>
+                <button class="btn-outline" onclick="window.location.href='login.html'">Iniciar Sesión</button>
+                <button class="btn-primary-nav" onclick="window.location.href='registro.html'">Registrarse</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Tienda de Mascotas</h1>
+        <p>Encuentra todo lo que necesitas para el cuidado de tu mascota</p>
+    </section>
+
+    <!-- Productos -->
+    <section class="products-section">
+        <h2 class="section-title">Productos Destacados</h2>
+        <p class="section-subtitle">Calidad y bienestar para tu mejor amigo</p>
+
+        <div class="products-grid">
+            <!-- Producto 1 - Alimento Premium para Perros -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-dog"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Alimento Premium para Perros</h3>
+                    <p class="product-description">Alimento balanceado de alta calidad para perros. Nutrición completa para todas las razas.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 89.00</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(1, 'Alimento Premium para Perros', 89)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producto 2 - Pelota Interactiva -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-futbol"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Pelota Interactiva</h3>
+                    <p class="product-description">Juguete resistente para mantener a tu mascota activa y entretenida. Ideal para perros.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 28.00</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(2, 'Pelota Interactiva', 28)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producto 3 - Collar Antipulgas -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Collar Antipulgas</h3>
+                    <p class="product-description">Protección efectiva contra pulgas y garrapatas. Duración de hasta 8 meses.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 45.00</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(3, 'Collar Antipulgas', 45)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producto 4 - Alimento para Gatos -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-cat"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Alimento para Gatos</h3>
+                    <p class="product-description">Nutrición completa para gatos adultos. Con proteínas de alta calidad.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 65.00</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(4, 'Alimento para Gatos', 65)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producto 5 - Rascador para Gatos -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Rascador para Gatos</h3>
+                    <p class="product-description">Torre rascadora con plataformas múltiples. Ideal para que tu gato juegue y afile sus uñas.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 120.00</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(5, 'Rascador para Gatos', 120)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Producto 6 - Cama Ortopédica -->
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-bed"></i>
+                </div>
+                <div class="product-content">
+                    <h3 class="product-title">Cama Ortopédica</h3>
+                    <p class="product-description">Cama cómoda con soporte ortopédico. Ideal para perros de todas las edades.</p>
+                    <div class="product-footer">
+                        <span class="product-price">S/ 78.50</span>
+                        <button class="btn-agregar" onclick="agregarAlCarrito(6, 'Cama Ortopédica', 78.50)">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3><i class="fas fa-paw"></i> Mis Patitas</h3>
+                <p>Tu veterinaria de confianza, cuidando de tus mejores amigos desde 2020.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-phone"></i> +51 999 888 777</p>
+                <p><i class="fas fa-envelope"></i> info@mispatitas.pe</p>
+            </div>
+            <div class="footer-col">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Mis Patitas. Todos los derechos reservados. | <a href="#">Términos y Condiciones</a> | <a href="#">Política de Privacidad</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Función para agregar al carrito
+        function agregarAlCarrito(id, nombre, precio) {
+            // Obtener carrito actual de localStorage
+            let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+            
+            // Verificar si el producto ya está en el carrito
+            const existingItem = carrito.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.cantidad += 1;
+            } else {
+                carrito.push({
+                    id: id,
+                    nombre: nombre,
+                    precio: precio,
+                    cantidad: 1
+                });
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            
+            // Mostrar mensaje de confirmación
+            mostrarMensaje(`✅ ${nombre} agregado al carrito`);
+        }
+
+        function mostrarMensaje(mensaje) {
+            // Crear toast
+            const toast = document.createElement('div');
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${mensaje}`;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Agregar animación si no existe
+            if (!document.querySelector('#toast-style')) {
+                const style = document.createElement('style');
+                style.id = 'toast-style';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

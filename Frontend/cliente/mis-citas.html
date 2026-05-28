@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente — Mis Citas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body data-role="cliente">
+    <header class="site-header">
+        <div class="container">
+            <h1>Panel Cliente</h1>
+            <p>Consulta de tus citas</p>
+            <nav class="nav" aria-label="Principal">
+                <a href="../index.html">Inicio</a>
+                <a href="./mis-citas.html" class="is-active">Mis citas</a>
+                <a href="./mis-mascotas.html">Mis mascotas</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="alert-citas" class="alert" hidden role="alert"></div>
+
+        <section class="card">
+            <div class="toolbar">
+                <h2>Mis citas</h2>
+                <button type="button" id="btn-recargar" class="btn btn--secondary">Recargar</button>
+            </div>
+            <p class="muted">Vista de cliente en modo lectura.</p>
+            <div class="table-wrap">
+                <table id="tabla-citas">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Mascota</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>requireRole('cliente');</script>
+    <script src="../js/api.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/citas.js"></script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge-categoria {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .categoria-consulta { background: #dbeafe; color: #1e40af; }
+        .categoria-vacuna { background: #d1fae5; color: #065f46; }
+        .categoria-estetica { background: #fce7f3; color: #9d174d; }
+        .categoria-cirugia { background: #fed7aa; color: #9a3412; }
+        .categoria-dental { background: #e0f2fe; color: #0369a1; }
+        .categoria-medicina { background: #fef3c7; color: #92400e; }
+        .categoria-diagnostico { background: #ede9fe; color: #5b21b6; }
+        .categoria-emergencia { background: #fee2e2; color: #dc2626; }
+
+        .precio {
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 550px;
+            max-width: 90%;
+            padding: 28px;
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item active"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Servicios Veterinarios</h1>
+                    <p>Gestión de servicios y procedimientos</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, categoría o descripción...">
+                </div>
+                <button class="btn-primary" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus"></i> Nuevo Servicio
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>CATEGORÍA</th>
+                            <th>DURACIÓN</th>
+                            <th>PRECIO</th>
+                            <th>DESCRIPCIÓN</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-plus-circle"></i> <span id="modalTitulo">Nuevo Servicio</span></h2>
+            <form id="servicioForm">
+                <input type="hidden" id="servicioId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre del servicio</label>
+                        <input type="text" id="nombre" placeholder="Ej: Consulta General" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="categoria" required>
+                            <option value="Consulta">Consulta</option>
+                            <option value="Vacuna">Vacuna</option>
+                            <option value="Estética">Estética</option>
+                            <option value="Cirugía">Cirugía</option>
+                            <option value="Dental">Dental</option>
+                            <option value="Medicina">Medicina</option>
+                            <option value="Diagnóstico">Diagnóstico</option>
+                            <option value="Emergencia">Emergencia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duración</label>
+                        <input type="text" id="duracion" placeholder="Ej: 30 min" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio (S/)</label>
+                        <input type="number" id="precio" placeholder="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <input type="text" id="descripcion" placeholder="Descripción del servicio" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Servicios según Figma
+        let servicios = [
+            { id: 1, nombre: 'Consulta General', categoria: 'Consulta', duracion: '30 min', precio: 80, descripcion: 'Revisión general del estado de salud' },
+            { id: 2, nombre: 'Vacunación', categoria: 'Vacuna', duracion: '20 min', precio: 60, descripcion: 'Aplicación de vacunas preventivas' },
+            { id: 3, nombre: 'Baño y Corte', categoria: 'Estética', duracion: '90 min', precio: 70, descripcion: 'Baño, secado y corte de pelo' },
+            { id: 4, nombre: 'Cirugía Menor', categoria: 'Cirugía', duracion: '120 min', precio: 350, descripcion: 'Procedimientos quirúrgicos menores' },
+            { id: 5, nombre: 'Limpieza Dental', categoria: 'Dental', duracion: '60 min', precio: 150, descripcion: 'Limpieza y profilaxis dental' },
+            { id: 6, nombre: 'Desparasitación', categoria: 'Medicina', duracion: '20 min', precio: 50, descripcion: 'Tratamiento antiparasitario interno/externo' },
+            { id: 7, nombre: 'Rayos X', categoria: 'Diagnóstico', duracion: '30 min', precio: 120, descripcion: 'Radiografía diagnóstica' },
+            { id: 8, nombre: 'Emergencia', categoria: 'Emergencia', duracion: '60 min', precio: 200, descripcion: 'Atención de urgencia 24/7' }
+        ];
+
+        let siguienteId = 9;
+
+        function getCategoriaClass(categoria) {
+            const clases = {
+                'Consulta': 'categoria-consulta',
+                'Vacuna': 'categoria-vacuna',
+                'Estética': 'categoria-estetica',
+                'Cirugía': 'categoria-cirugia',
+                'Dental': 'categoria-dental',
+                'Medicina': 'categoria-medicina',
+                'Diagnóstico': 'categoria-diagnostico',
+                'Emergencia': 'categoria-emergencia'
+            };
+            return clases[categoria] || 'categoria-consulta';
+        }
+
+        function getCategoriaIcono(categoria) {
+            const iconos = {
+                'Consulta': 'fa-stethoscope',
+                'Vacuna': 'fa-syringe',
+                'Estética': 'fa-scissors',
+                'Cirugía': 'fa-scalpel',
+                'Dental': 'fa-tooth',
+                'Medicina': 'fa-capsules',
+                'Diagnóstico': 'fa-x-ray',
+                'Emergencia': 'fa-ambulance'
+            };
+            return iconos[categoria] || 'fa-tag';
+        }
+
+        function renderizarTabla(filtro) {
+            const tbody = document.getElementById('tablaBody');
+            let filtroLower = '';
+            if (filtro) {
+                filtroLower = filtro.toLowerCase();
+            }
+            
+            let filtrados = [];
+            if (filtroLower === '') {
+                filtrados = servicios;
+            } else {
+                for (let i = 0; i < servicios.length; i++) {
+                    const s = servicios[i];
+                    if (s.nombre.toLowerCase().includes(filtroLower) ||
+                        s.categoria.toLowerCase().includes(filtroLower) ||
+                        s.descripcion.toLowerCase().includes(filtroLower)) {
+                        filtrados.push(s);
+                    }
+                }
+            }
+            
+            const total = servicios.length;
+            const mostrar = filtrados.length;
+            document.getElementById('recordsCount').innerHTML = 'Mostrando <strong>' + mostrar + '</strong> de <strong>' + total + '</strong> servicios';
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No hay servicios registrados</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < filtrados.length; i++) {
+                const s = filtrados[i];
+                const categoriaClass = getCategoriaClass(s.categoria);
+                const categoriaIcono = getCategoriaIcono(s.categoria);
+                
+                html += '<tr>';
+                html += '<td><strong>' + s.nombre + '</strong></td>';
+                html += '<td><span class="badge-categoria ' + categoriaClass + '"><i class="fas ' + categoriaIcono + '"></i> ' + s.categoria + '</span></td>';
+                html += '<td>' + s.duracion + '</td>';
+                html += '<td><span class="precio">S/ ' + s.precio + '</span></td>';
+                html += '<td>' + s.descripcion + '</td>';
+                html += '<td><div class="action-buttons">';
+                html += '<button class="btn-action btn-edit" onclick="editarServicio(' + s.id + ')"><i class="fas fa-edit"></i></button>';
+                html += '<button class="btn-action btn-delete" onclick="eliminarServicio(' + s.id + ')"><i class="fas fa-trash-alt"></i></button>';
+                html += '</div></td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function abrirModalNuevo() {
+            document.getElementById('modalTitulo').innerText = 'Nuevo Servicio';
+            document.getElementById('servicioId').value = '';
+            document.getElementById('servicioForm').reset();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function editarServicio(id) {
+            let servicio = null;
+            for (let i = 0; i < servicios.length; i++) {
+                if (servicios[i].id === id) {
+                    servicio = servicios[i];
+                    break;
+                }
+            }
+            if (servicio) {
+                document.getElementById('modalTitulo').innerText = 'Editar Servicio';
+                document.getElementById('servicioId').value = servicio.id;
+                document.getElementById('nombre').value = servicio.nombre;
+                document.getElementById('categoria').value = servicio.categoria;
+                document.getElementById('duracion').value = servicio.duracion;
+                document.getElementById('precio').value = servicio.precio;
+                document.getElementById('descripcion').value = servicio.descripcion;
+                document.getElementById('modal').classList.add('active');
+            }
+        }
+
+        function eliminarServicio(id) {
+            if (confirm('¿Eliminar este servicio?')) {
+                let nuevosServicios = [];
+                for (let i = 0; i < servicios.length; i++) {
+                    if (servicios[i].id !== id) {
+                        nuevosServicios.push(servicios[i]);
+                    }
+                }
+                servicios = nuevosServicios;
+                const searchValue = document.getElementById('searchInput').value;
+                renderizarTabla(searchValue);
+                mostrarMensaje('Servicio eliminado', 'success');
+            }
+        }
+
+        document.getElementById('servicioForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('servicioId').value;
+            
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                categoria: document.getElementById('categoria').value,
+                duracion: document.getElementById('duracion').value,
+                precio: parseInt(document.getElementById('precio').value),
+                descripcion: document.getElementById('descripcion').value
+            };
+            
+            if (id !== '') {
+                for (let i = 0; i < servicios.length; i++) {
+                    if (servicios[i].id === parseInt(id)) {
+                        servicios[i] = { ...servicios[i], ...datos };
+                        break;
+                    }
+                }
+                mostrarMensaje('Servicio actualizado', 'success');
+            } else {
+                datos.id = siguienteId;
+                siguienteId++;
+                servicios.push(datos);
+                mostrarMensaje('Servicio creado', 'success');
+            }
+            
+            cerrarModal();
+            const searchValue = document.getElementById('searchInput').value;
+            renderizarTabla(searchValue);
+        });
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            renderizarTabla(e.target.value);
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + tipo;
+            const icon = (tipo === 'success') ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = '<i class="fas ' + icon + '"></i> ' + mensaje;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.remove();
+            }, 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+
+        renderizarTabla('');
+    </script>
+</body>
+</html>

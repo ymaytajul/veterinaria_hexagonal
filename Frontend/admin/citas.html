@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .estado-completada {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .estado-programada {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .precio {
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 600px;
+            max-width: 90%;
+            padding: 28px;
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item active"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Citas</h1>
+                    <p>Gestión de citas veterinarias</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por mascota, propietario o servicio...">
+                </div>
+                <button class="btn-primary" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus"></i> Nueva Cita
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table" id="tablaCitas">
+                    <thead>
+                        <tr>
+                            <th>MASCOTA</th>
+                            <th>PROPIETARIO</th>
+                            <th>SERVICIO</th>
+                            <th>FECHA</th>
+                            <th>HORA</th>
+                            <th>VETERINARIO</th>
+                            <th>ESTADO</th>
+                            <th>PRECIO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-calendar-plus"></i> <span id="modalTitulo">Nueva Cita</span></h2>
+            <form id="citaForm">
+                <input type="hidden" id="citaId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mascota</label>
+                        <select id="mascotaId" required>
+                            <option value="">Seleccionar mascota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Servicio</label>
+                        <select id="servicio" required>
+                            <option value="Consulta General">Consulta General</option>
+                            <option value="Vacunación">Vacunación</option>
+                            <option value="Baño y Corte">Baño y Corte</option>
+                            <option value="Cirugía Menor">Cirugía Menor</option>
+                            <option value="Limpieza Dental">Limpieza Dental</option>
+                            <option value="Desparasitación">Desparasitación</option>
+                            <option value="Rayos X">Rayos X</option>
+                            <option value="Emergencia">Emergencia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora</label>
+                        <input type="time" id="hora" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Veterinario</label>
+                        <select id="veterinario" required>
+                            <option value="Dr. Ramírez">Dr. Ramírez</option>
+                            <option value="Dra. López">Dra. López</option>
+                            <option value="Est. Martínez">Est. Martínez</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select id="estado" required>
+                            <option value="Completada">Completada</option>
+                            <option value="Programada">Programada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Precio (S/)</label>
+                    <input type="number" id="precio" placeholder="0" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mascotas
+        const mascotas = [
+            { id: 1, nombre: 'Luna', propietarioId: 1, propietarioNombre: 'María García' },
+            { id: 2, nombre: 'Max', propietarioId: 1, propietarioNombre: 'María García' },
+            { id: 3, nombre: 'Michi', propietarioId: 2, propietarioNombre: 'Carlos Rodríguez' },
+            { id: 4, nombre: 'Rocky', propietarioId: 3, propietarioNombre: 'Ana Torres' },
+            { id: 5, nombre: 'Cleo', propietarioId: 4, propietarioNombre: 'Luis Mendoza' },
+            { id: 6, nombre: 'Toby', propietarioId: 5, propietarioNombre: 'Sofía Vargas' },
+            { id: 7, nombre: 'Nala', propietarioId: 6, propietarioNombre: 'Diego Flores' },
+            { id: 8, nombre: 'Simba', propietarioId: 7, propietarioNombre: 'Valeria Cruz' },
+            { id: 9, nombre: 'Bella', propietarioId: 8, propietarioNombre: 'Roberto Silva' },
+            { id: 10, nombre: 'Coco', propietarioId: 2, propietarioNombre: 'Carlos Rodríguez' }
+        ];
+
+        // Citas según Figma
+        let citas = [
+            { id: 1, mascotaId: 1, mascotaNombre: 'Luna', propietarioNombre: 'María García', servicio: 'Consulta General', fecha: '2026-05-10', hora: '09:00', veterinario: 'Dr. Ramírez', estado: 'Completada', precio: 80 },
+            { id: 2, mascotaId: 3, mascotaNombre: 'Michi', propietarioNombre: 'Carlos Rodríguez', servicio: 'Vacunación', fecha: '2026-05-12', hora: '10:30', veterinario: 'Dra. López', estado: 'Completada', precio: 60 },
+            { id: 3, mascotaId: 4, mascotaNombre: 'Rocky', propietarioNombre: 'Ana Torres', servicio: 'Baño y Corte', fecha: '2026-05-14', hora: '11:00', veterinario: 'Est. Martínez', estado: 'Completada', precio: 70 },
+            { id: 4, mascotaId: 2, mascotaNombre: 'Max', propietarioNombre: 'María García', servicio: 'Vacunación', fecha: '2026-05-15', hora: '09:30', veterinario: 'Dr. Ramírez', estado: 'Completada', precio: 60 },
+            { id: 5, mascotaId: 6, mascotaNombre: 'Toby', propietarioNombre: 'Sofía Vargas', servicio: 'Limpieza Dental', fecha: '2026-05-16', hora: '14:00', veterinario: 'Dra. López', estado: 'Completada', precio: 150 },
+            { id: 6, mascotaId: 7, mascotaNombre: 'Nala', propietarioNombre: 'Diego Flores', servicio: 'Consulta General', fecha: '2026-05-18', hora: '10:00', veterinario: 'Dr. Ramírez', estado: 'Completada', precio: 80 },
+            { id: 7, mascotaId: 9, mascotaNombre: 'Bella', propietarioNombre: 'Roberto Silva', servicio: 'Baño y Corte', fecha: '2026-05-23', hora: '15:00', veterinario: 'Est. Martínez', estado: 'Programada', precio: 70 },
+            { id: 8, mascotaId: 5, mascotaNombre: 'Cleo', propietarioNombre: 'Luis Mendoza', servicio: 'Desparasitación', fecha: '2026-05-24', hora: '09:00', veterinario: 'Dra. López', estado: 'Programada', precio: 50 },
+            { id: 9, mascotaId: 8, mascotaNombre: 'Simba', propietarioNombre: 'Valeria Cruz', servicio: 'Consulta General', fecha: '2026-05-25', hora: '11:30', veterinario: 'Dr. Ramírez', estado: 'Programada', precio: 80 },
+            { id: 10, mascotaId: 10, mascotaNombre: 'Coco', propietarioNombre: 'Carlos Rodríguez', servicio: 'Cirugía Menor', fecha: '2026-05-28', hora: '08:00', veterinario: 'Dr. Ramírez', estado: 'Programada', precio: 350 },
+            { id: 11, mascotaId: 1, mascotaNombre: 'Luna', propietarioNombre: 'María García', servicio: 'Baño y Corte', fecha: '2026-04-15', hora: '10:00', veterinario: 'Est. Martínez', estado: 'Completada', precio: 70 },
+            { id: 12, mascotaId: 2, mascotaNombre: 'Max', propietarioNombre: 'María García', servicio: 'Limpieza Dental', fecha: '2026-04-20', hora: '14:00', veterinario: 'Dra. López', estado: 'Completada', precio: 150 }
+        ];
+
+        let siguienteId = 13;
+
+        function cargarSelectMascotas() {
+            const select = document.getElementById('mascotaId');
+            select.innerHTML = '<option value="">Seleccionar mascota</option>';
+            for (let m of mascotas) {
+                select.innerHTML += '<option value="' + m.id + '">' + m.nombre + ' (' + m.propietarioNombre + ')</option>';
+            }
+        }
+
+        function renderizarTabla(filtro) {
+            const tbody = document.getElementById('tablaBody');
+            let filtroLower = '';
+            if (filtro) {
+                filtroLower = filtro.toLowerCase();
+            }
+            
+            let filtrados = [];
+            if (filtroLower === '') {
+                filtrados = citas;
+            } else {
+                for (let c of citas) {
+                    if (c.mascotaNombre.toLowerCase().includes(filtroLower) ||
+                        c.propietarioNombre.toLowerCase().includes(filtroLower) ||
+                        c.servicio.toLowerCase().includes(filtroLower)) {
+                        filtrados.push(c);
+                    }
+                }
+            }
+            
+            const total = citas.length;
+            const mostrar = filtrados.length;
+            document.getElementById('recordsCount').innerHTML = 'Mostrando <strong>' + mostrar + '</strong> de <strong>' + total + '</strong> citas';
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px;">No hay citas registradas</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < filtrados.length; i++) {
+                const c = filtrados[i];
+                const estadoClass = (c.estado === 'Completada') ? 'estado-completada' : 'estado-programada';
+                const estadoIcon = (c.estado === 'Completada') ? 'fa-check-circle' : 'fa-clock';
+                
+                html += '<tr>';
+                html += '<td><strong>' + c.mascotaNombre + '</strong></td>';
+                html += '<td>' + c.propietarioNombre + '</td>';
+                html += '<td>' + c.servicio + '</td>';
+                html += '<td>' + c.fecha + '</td>';
+                html += '<td>' + c.hora + '</td>';
+                html += '<td>' + c.veterinario + '</td>';
+                html += '<td><span class="' + estadoClass + '"><i class="fas ' + estadoIcon + '"></i> ' + c.estado + '</span></td>';
+                html += '<td><span class="precio">S/ ' + c.precio + '</span></td>';
+                html += '<td><div class="action-buttons">';
+                html += '<button class="btn-action btn-edit" onclick="editarCita(' + c.id + ')"><i class="fas fa-edit"></i></button>';
+                html += '<button class="btn-action btn-delete" onclick="eliminarCita(' + c.id + ')"><i class="fas fa-trash-alt"></i></button>';
+                html += '</div></td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function abrirModalNuevo() {
+            document.getElementById('modalTitulo').innerText = 'Nueva Cita';
+            document.getElementById('citaId').value = '';
+            document.getElementById('citaForm').reset();
+            cargarSelectMascotas();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function editarCita(id) {
+            let c = null;
+            for (let i = 0; i < citas.length; i++) {
+                if (citas[i].id === id) {
+                    c = citas[i];
+                    break;
+                }
+            }
+            if (c) {
+                document.getElementById('modalTitulo').innerText = 'Editar Cita';
+                document.getElementById('citaId').value = c.id;
+                cargarSelectMascotas();
+                setTimeout(function() {
+                    document.getElementById('mascotaId').value = c.mascotaId;
+                }, 50);
+                document.getElementById('servicio').value = c.servicio;
+                document.getElementById('fecha').value = c.fecha;
+                document.getElementById('hora').value = c.hora;
+                document.getElementById('veterinario').value = c.veterinario;
+                document.getElementById('estado').value = c.estado;
+                document.getElementById('precio').value = c.precio;
+                document.getElementById('modal').classList.add('active');
+            }
+        }
+
+        function eliminarCita(id) {
+            if (confirm('¿Eliminar esta cita?')) {
+                let nuevasCitas = [];
+                for (let i = 0; i < citas.length; i++) {
+                    if (citas[i].id !== id) {
+                        nuevasCitas.push(citas[i]);
+                    }
+                }
+                citas = nuevasCitas;
+                const searchValue = document.getElementById('searchInput').value;
+                renderizarTabla(searchValue);
+                mostrarMensaje('Cita eliminada', 'success');
+            }
+        }
+
+        document.getElementById('citaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('citaId').value;
+            const mascotaId = parseInt(document.getElementById('mascotaId').value);
+            let mascota = null;
+            for (let i = 0; i < mascotas.length; i++) {
+                if (mascotas[i].id === mascotaId) {
+                    mascota = mascotas[i];
+                    break;
+                }
+            }
+            
+            const datos = {
+                mascotaId: mascotaId,
+                mascotaNombre: mascota ? mascota.nombre : '',
+                propietarioNombre: mascota ? mascota.propietarioNombre : '',
+                servicio: document.getElementById('servicio').value,
+                fecha: document.getElementById('fecha').value,
+                hora: document.getElementById('hora').value,
+                veterinario: document.getElementById('veterinario').value,
+                estado: document.getElementById('estado').value,
+                precio: parseInt(document.getElementById('precio').value)
+            };
+            
+            if (id !== '') {
+                // Editar
+                for (let i = 0; i < citas.length; i++) {
+                    if (citas[i].id === parseInt(id)) {
+                        citas[i] = { ...citas[i], ...datos };
+                        break;
+                    }
+                }
+                mostrarMensaje('Cita actualizada', 'success');
+            } else {
+                // Crear
+                datos.id = siguienteId;
+                siguienteId++;
+                citas.push(datos);
+                mostrarMensaje('Cita creada', 'success');
+            }
+            
+            cerrarModal();
+            const searchValue = document.getElementById('searchInput').value;
+            renderizarTabla(searchValue);
+        });
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            renderizarTabla(e.target.value);
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + tipo;
+            const icon = (tipo === 'success') ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = '<i class="fas ' + icon + '"></i> ' + mensaje;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.remove();
+            }, 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+
+        // Inicializar
+        renderizarTabla('');
+    </script>
+</body>
+</html>

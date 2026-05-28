@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | VetAdmin Pro</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar con iconos profesionales -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-chart-line"></i><span>Dashboard</span>
+                </a>
+                <a href="propietarios.html" class="nav-item">
+                    <i class="fas fa-users"></i><span>Propietarios</span>
+                </a>
+                <a href="mascotas.html" class="nav-item">
+                    <i class="fas fa-dog"></i><span>Mascotas</span>
+                </a>
+                <a href="citas.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i><span>Citas</span>
+                </a>
+                <a href="servicios.html" class="nav-item">
+                    <i class="fas fa-syringe"></i><span>Servicios</span>
+                </a>
+                <a href="inventario.html" class="nav-item">
+                    <i class="fas fa-boxes"></i><span>Inventario</span>
+                </a>
+                <a href="ventas.html" class="nav-item">
+                    <i class="fas fa-chart-simple"></i><span>Ventas</span>
+                </a>
+                <a href="historial.html" class="nav-item">
+                    <i class="fas fa-clock-rotate-left"></i><span>Historial</span>
+                </a>
+                <a href="reportes.html" class="nav-item">
+                    <i class="fas fa-file-alt"></i><span>Reportes</span>
+                </a>
+                <div class="nav-item logout-item" onclick="window.auth.logout()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Panel de Control</h1>
+                    <p>Resumen general de la clínica veterinaria</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div>
+                        <div class="user-name" id="userName">Admin</div>
+                        <div class="user-role" id="userRole">Administrador</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>8</h3>
+                        <p><i class="fas fa-user-friends"></i> Propietarios</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>10</h3>
+                        <p><i class="fas fa-paw"></i> Mascotas</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-dog"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>4</h3>
+                        <p><i class="fas fa-hourglass-half"></i> Citas pendientes</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>S/ 2,615</h3>
+                        <p><i class="fas fa-coins"></i> Ingresos totales</p>
+                    </div>
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Citas recientes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Citas recientes</h3>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Luna — María García</h4>
+                                <p><i class="fas fa-stethoscope"></i> Consulta General</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-10 09:00</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Michi — Carlos Rodríguez</h4>
+                                <p><i class="fas fa-syringe"></i> Vacunación</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-12 10:30</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Rocky — Ana Torres</h4>
+                                <p><i class="fas fa-scissors"></i> Baño y Corte</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-14 11:00</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Max — María García</h4>
+                                <p><i class="fas fa-syringe"></i> Vacunación</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-15 09:30</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Toby — Sofía Vargas</h4>
+                                <p><i class="fas fa-tooth"></i> Limpieza Dental</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-16 14:00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ventas recientes -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-simple"></i> Ventas recientes</h3>
+                        <span class="badge">5</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="venta-item">
+                            <div class="propietario-info">
+                                <h4>María García</h4>
+                                <p><i class="fas fa-box"></i> 2 artículo(s) - Tarjeta</p>
+                            </div>
+                            <div class="venta-total">S/ 223</div>
+                        </div>
+                        <div class="venta-item">
+                            <div class="propietario-info">
+                                <h4>Ana Torres</h4>
+                                <p><i class="fas fa-box"></i> 2 artículo(s) - Efectivo</p>
+                            </div>
+                            <div class="venta-total">S/ 121</div>
+                        </div>
+                        <div class="venta-item">
+                            <div class="propietario-info">
+                                <h4>Carlos Rodríguez</h4>
+                                <p><i class="fas fa-box"></i> 2 artículo(s) - Yape</p>
+                            </div>
+                            <div class="venta-total">S/ 149</div>
+                        </div>
+                        <div class="venta-item">
+                            <div class="propietario-info">
+                                <h4>María García</h4>
+                                <p><i class="fas fa-box"></i> 2 artículo(s) - Tarjeta</p>
+                            </div>
+                            <div class="venta-total">S/ 171</div>
+                        </div>
+                        <div class="venta-item">
+                            <div class="propietario-info">
+                                <h4>Sofia Vargas</h4>
+                                <p><i class="fas fa-box"></i> 1 artículo(s) - Efectivo</p>
+                            </div>
+                            <div class="venta-total">S/ 85</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen de mascotas y citas pendientes -->
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-dog"></i> Mascotas registradas</h3>
+                        <span class="badge">10</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="propietario-item">
+                            <div class="propietario-info">
+                                <h4>María García</h4>
+                                <p><i class="fas fa-paw"></i> Luna, Max</p>
+                            </div>
+                            <span class="pago-tarjeta">2 mascotas</span>
+                        </div>
+                        <div class="propietario-item">
+                            <div class="propietario-info">
+                                <h4>Carlos Rodríguez</h4>
+                                <p><i class="fas fa-paw"></i> Michi, Coco</p>
+                            </div>
+                            <span class="pago-efectivo">2 mascotas</span>
+                        </div>
+                        <div class="propietario-item">
+                            <div class="propietario-info">
+                                <h4>Ana Torres</h4>
+                                <p><i class="fas fa-paw"></i> Rocky</p>
+                            </div>
+                            <span class="pago-yape">1 mascota</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Citas pendientes</h3>
+                        <span class="badge">4</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Bella — Roberto Silva</h4>
+                                <p><i class="fas fa-scissors"></i> Baño y Corte</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-23 15:00</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Cleo — Luis Mendoza</h4>
+                                <p><i class="fas fa-capsules"></i> Desparasitación</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-24 09:00</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Simba — Valeria Cruz</h4>
+                                <p><i class="fas fa-stethoscope"></i> Consulta General</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-25 11:30</div>
+                        </div>
+                        <div class="cita-item">
+                            <div class="cita-info">
+                                <h4>Coco — Carlos Rodríguez</h4>
+                                <p><i class="fas fa-scalpel"></i> Cirugía Menor</p>
+                            </div>
+                            <div class="cita-fecha">2026-05-28 08:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html> 

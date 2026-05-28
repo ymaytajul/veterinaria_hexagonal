@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge-venta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-cita {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .monto {
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item active"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Historial de Compras</h1>
+                    <p>Registro de todas las transacciones (ventas y citas)</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por tipo, cliente o descripción...">
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>TIPO</th>
+                            <th>FECHA</th>
+                            <th>CLIENTE</th>
+                            <th>DESCRIPCIÓN</th>
+                            <th>MONTO</th>
+                            <th>DETALLE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <script>
+        // Historial según Figma
+        let historial = [
+            { tipo: 'Venta', fecha: '2026-05-20', cliente: 'Roberto Silva', descripcion: '2x Shampoo medicado Virbac, 1x Correa entrenamiento', monto: 138, detalle: 'Efectivo' },
+            { tipo: 'Venta', fecha: '2026-05-19', cliente: 'Diego Flores', descripcion: '3x Royal Canin Adult', monto: 267, detalle: 'Yape' },
+            { tipo: 'Cita', fecha: '2026-05-18', cliente: 'Diego Flores', descripcion: 'Consulta General — Nala', monto: 80, detalle: 'Dr. Ramírez' },
+            { tipo: 'Venta', fecha: '2026-05-18', cliente: 'Luis Mendoza', descripcion: '1x Collar antiparasitario Seresto, 2x Antipulgas Frontline Plus', monto: 250, detalle: 'Tarjeta' },
+            { tipo: 'Cita', fecha: '2026-05-16', cliente: 'Sofia Vargas', descripcion: 'Limpieza Dental — Toby', monto: 150, detalle: 'Dra. López' },
+            { tipo: 'Venta', fecha: '2026-05-16', cliente: 'Sofia Vargas', descripcion: '1x Cama ortopédica L', monto: 85, detalle: 'Efectivo' },
+            { tipo: 'Cita', fecha: '2026-05-15', cliente: 'María García', descripcion: 'Vacunación — Max', monto: 60, detalle: 'Dr. Ramírez' },
+            { tipo: 'Venta', fecha: '2026-05-15', cliente: 'María García', descripcion: '1x Pro Plan Puppy, 2x Nutri-Vet Vitaminas', monto: 171, detalle: 'Tarjeta' },
+            { tipo: 'Cita', fecha: '2026-05-14', cliente: 'Ana Torres', descripcion: 'Baño y Corte — Rocky', monto: 70, detalle: 'Est. Martínez' },
+            { tipo: 'Venta', fecha: '2026-05-14', cliente: 'Carlos Rodríguez', descripcion: '3x Whiskas Atún, 2x Arena sanitaria Cat Sand', monto: 149, detalle: 'Yape' },
+            { tipo: 'Cita', fecha: '2026-05-12', cliente: 'Carlos Rodríguez', descripcion: 'Vacunación — Michi', monto: 60, detalle: 'Dra. López' },
+            { tipo: 'Venta', fecha: '2026-05-12', cliente: 'Ana Torres', descripcion: '2x Juguete Kong mordedor, 1x Antipulgas Frontline Plus', monto: 121, detalle: 'Efectivo' },
+            { tipo: 'Cita', fecha: '2026-05-10', cliente: 'María García', descripcion: 'Consulta General — Luna', monto: 80, detalle: 'Dr. Ramírez' }
+        ];
+
+        function renderizarTabla(filtro) {
+            const tbody = document.getElementById('tablaBody');
+            let filtroLower = filtro ? filtro.toLowerCase() : '';
+            
+            let filtrados = filtroLower === '' ? historial : historial.filter(h => 
+                h.tipo.toLowerCase().includes(filtroLower) ||
+                h.cliente.toLowerCase().includes(filtroLower) ||
+                h.descripcion.toLowerCase().includes(filtroLower)
+            );
+            
+            document.getElementById('recordsCount').innerHTML = 'Mostrando <strong>' + filtrados.length + '</strong> de <strong>' + historial.length + '</strong> registros';
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No hay registros encontrados</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < filtrados.length; i++) {
+                const h = filtrados[i];
+                const esVenta = (h.tipo === 'Venta');
+                
+                if (esVenta) {
+                    html += '<tr>';
+                    html += '<td><span class="badge-venta"><i class="fas fa-money-bill-wave"></i> Venta</span></td>';
+                    html += '<td>' + h.fecha + '</td';
+                    html += '<td><strong>' + h.cliente + '</strong></td>';
+                    html += '<td>' + h.descripcion + '</td';
+                    html += '<td><span class="monto">S/ ' + h.monto + '</span></td>';
+                    html += '<td>' + h.detalle + '</td';
+                    html += '</tr>';
+                } else {
+                    html += '<tr>';
+                    html += '<td><span class="badge-cita"><i class="fas fa-calendar-check"></i> Cita</span></td>';
+                    html += '<td>' + h.fecha + '</td';
+                    html += '<td><strong>' + h.cliente + '</strong></td>';
+                    html += '<td>' + h.descripcion + '</td';
+                    html += '<td><span class="monto">S/ ' + h.monto + '</span></td>';
+                    html += '<td>' + h.detalle + '</td';
+                    html += '</tr>';
+                }
+            }
+            tbody.innerHTML = html;
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            renderizarTabla(e.target.value);
+        });
+
+        renderizarTabla('');
+    </script>
+</body>
+</html>

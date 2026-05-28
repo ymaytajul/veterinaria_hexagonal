@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mascotas | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 16px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge-perro {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-gato {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: #fce7f3;
+            color: #9d174d;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 550px;
+            max-width: 90%;
+            padding: 28px;
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item active"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Mascotas</h1>
+                    <p>Gestión de pacientes veterinarios</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, especie o propietario...">
+                </div>
+                <button class="btn-primary" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus"></i> Nueva Mascota
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>ESPECIE</th>
+                            <th>RAZA</th>
+                            <th>EDAD</th>
+                            <th>PESO</th>
+                            <th>PROPIETARIO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-paw"></i> <span id="modalTitulo">Nueva Mascota</span></h2>
+            <form id="mascotaForm">
+                <input type="hidden" id="mascotaId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="nombre" placeholder="Ej: Luna" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Especie</label>
+                        <select id="especie" required>
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ave">Ave</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Raza</label>
+                        <input type="text" id="raza" placeholder="Ej: Golden Retriever" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Edad</label>
+                        <input type="text" id="edad" placeholder="Ej: 3 años" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Peso</label>
+                        <input type="text" id="peso" placeholder="Ej: 28 kg" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Propietario</label>
+                        <select id="propietarioId" required>
+                            <option value="">Seleccionar</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const propietarios = [
+            { id: 1, nombre: 'María García' },
+            { id: 2, nombre: 'Carlos Rodríguez' },
+            { id: 3, nombre: 'Ana Torres' },
+            { id: 4, nombre: 'Luis Mendoza' },
+            { id: 5, nombre: 'Sofía Vargas' },
+            { id: 6, nombre: 'Diego Flores' },
+            { id: 7, nombre: 'Valeria Cruz' },
+            { id: 8, nombre: 'Roberto Silva' }
+        ];
+
+        let mascotas = [
+            { id: 1, nombre: 'Luna', especie: 'Perro', raza: 'Golden Retriever', edad: '3 años', peso: '28 kg', propietarioId: 1, propietarioNombre: 'María García' },
+            { id: 2, nombre: 'Max', especie: 'Perro', raza: 'Labrador', edad: '5 años', peso: '32 kg', propietarioId: 1, propietarioNombre: 'María García' },
+            { id: 3, nombre: 'Michi', especie: 'Gato', raza: 'Siamés', edad: '2 años', peso: '4 kg', propietarioId: 2, propietarioNombre: 'Carlos Rodríguez' },
+            { id: 4, nombre: 'Rocky', especie: 'Perro', raza: 'Bulldog Francés', edad: '4 años', peso: '12 kg', propietarioId: 3, propietarioNombre: 'Ana Torres' },
+            { id: 5, nombre: 'Cleo', especie: 'Gato', raza: 'Persa', edad: '6 años', peso: '3.5 kg', propietarioId: 4, propietarioNombre: 'Luis Mendoza' },
+            { id: 6, nombre: 'Toby', especie: 'Perro', raza: 'Beagle', edad: '2 años', peso: '10 kg', propietarioId: 5, propietarioNombre: 'Sofía Vargas' },
+            { id: 7, nombre: 'Nala', especie: 'Perro', raza: 'Husky Siberiano', edad: '1 años', peso: '18 kg', propietarioId: 6, propietarioNombre: 'Diego Flores' },
+            { id: 8, nombre: 'Simba', especie: 'Gato', raza: 'Maine Coon', edad: '3 años', peso: '6 kg', propietarioId: 7, propietarioNombre: 'Valeria Cruz' },
+            { id: 9, nombre: 'Bella', especie: 'Perro', raza: 'Poodle', edad: '7 años', peso: '8 kg', propietarioId: 8, propietarioNombre: 'Roberto Silva' },
+            { id: 10, nombre: 'Coco', especie: 'Perro', raza: 'Chihuahua', edad: '4 años', peso: '2.5 kg', propietarioId: 2, propietarioNombre: 'Carlos Rodríguez' }
+        ];
+
+        let siguienteId = 11;
+
+        function cargarSelectPropietarios() {
+            const select = document.getElementById('propietarioId');
+            select.innerHTML = '<option value="">Seleccionar propietario</option>';
+            propietarios.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
+            });
+        }
+
+        function renderizarTabla(filtro = '') {
+            const tbody = document.getElementById('tablaBody');
+            const filtroLower = filtro.toLowerCase();
+            
+            const filtrados = filtroLower ? mascotas.filter(m => 
+                m.nombre.toLowerCase().includes(filtroLower) ||
+                m.especie.toLowerCase().includes(filtroLower) ||
+                m.propietarioNombre.toLowerCase().includes(filtroLower)
+            ) : mascotas;
+            
+            document.getElementById('recordsCount').innerHTML = `Mostrando <strong>${filtrados.length}</strong> de <strong>${mascotas.length}</strong> mascotas`;
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No hay mascotas registradas</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (let m of filtrados) {
+                html += `<tr>
+                    <td><strong>${m.nombre}</strong></td>
+                    <td>${m.especie === 'Perro' ? '<span class="badge-perro"><i class="fas fa-dog"></i> Perro</span>' : '<span class="badge-gato"><i class="fas fa-cat"></i> Gato</span>'}</td>
+                    <td>${m.raza}</td>
+                    <td>${m.edad}</td>
+                    <td>${m.peso}</td>
+                    <td>${m.propietarioNombre}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-edit" onclick="editarMascota(${m.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn-action btn-delete" onclick="eliminarMascota(${m.id})"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function abrirModalNuevo() {
+            document.getElementById('modalTitulo').innerText = 'Nueva Mascota';
+            document.getElementById('mascotaId').value = '';
+            document.getElementById('mascotaForm').reset();
+            cargarSelectPropietarios();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function editarMascota(id) {
+            const m = mascotas.find(m => m.id === id);
+            if (m) {
+                document.getElementById('modalTitulo').innerText = 'Editar Mascota';
+                document.getElementById('mascotaId').value = m.id;
+                document.getElementById('nombre').value = m.nombre;
+                document.getElementById('especie').value = m.especie;
+                document.getElementById('raza').value = m.raza;
+                document.getElementById('edad').value = m.edad;
+                document.getElementById('peso').value = m.peso;
+                cargarSelectPropietarios();
+                document.getElementById('propietarioId').value = m.propietarioId;
+                document.getElementById('modal').classList.add('active');
+            }
+        }
+
+        function eliminarMascota(id) {
+            if (confirm('¿Eliminar esta mascota?')) {
+                mascotas = mascotas.filter(m => m.id !== id);
+                renderizarTabla(document.getElementById('searchInput').value);
+                mostrarMensaje('Mascota eliminada', 'success');
+            }
+        }
+
+        document.getElementById('mascotaForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('mascotaId').value;
+            const propietarioId = parseInt(document.getElementById('propietarioId').value);
+            const propietario = propietarios.find(p => p.id === propietarioId);
+            
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                especie: document.getElementById('especie').value,
+                raza: document.getElementById('raza').value,
+                edad: document.getElementById('edad').value,
+                peso: document.getElementById('peso').value,
+                propietarioId: propietarioId,
+                propietarioNombre: propietario ? propietario.nombre : ''
+            };
+            
+            if (id) {
+                const index = mascotas.findIndex(m => m.id === parseInt(id));
+                if (index !== -1) {
+                    mascotas[index] = { ...mascotas[index], ...datos };
+                    mostrarMensaje('Mascota actualizada', 'success');
+                }
+            } else {
+                datos.id = siguienteId++;
+                mascotas.push(datos);
+                mostrarMensaje('Mascota creada', 'success');
+            }
+            
+            cerrarModal();
+            renderizarTabla(document.getElementById('searchInput').value);
+        });
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderizarTabla(e.target.value);
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${tipo}`;
+            toast.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${mensaje}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) cerrarModal();
+        };
+
+        renderizarTabla();
+    </script>
+</body>
+</html>

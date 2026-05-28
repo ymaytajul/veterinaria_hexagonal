@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .sidebar-header h2 { font-size: 22px; }
+        .sidebar-header h2 i { color: #10b981; margin-right: 8px; }
+        .sidebar-header span { font-size: 12px; color: rgba(255,255,255,0.5); display: block; margin-top: 6px; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item i { width: 22px; }
+        .logout-item { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; }
+        .logout-item:hover { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .main-content { flex: 1; margin-left: 280px; padding: 28px 32px; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
+        .page-title h1 { font-size: 28px; font-weight: 700; color: #1f2937; }
+        .page-title p { color: #6b7280; font-size: 14px; margin-top: 4px; }
+        .user-info { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 20px; border-radius: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .search-box { display: flex; align-items: center; gap: 8px; background: white; padding: 8px 16px; border-radius: 40px; border: 1px solid #e5e7eb; min-width: 280px; }
+        .search-box i { color: #9ca3af; }
+        .search-box input { border: none; outline: none; font-size: 14px; width: 100%; font-family: 'Inter', sans-serif; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+        .table-wrapper { background: white; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        .data-table thead { background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+        .data-table th { padding: 14px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 12px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #374151; vertical-align: middle; }
+        .data-table tr:hover { background: #f9fafb; }
+        .badge-estado { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 30px; font-size: 11px; font-weight: 600; background: #d1fae5; color: #065f46; }
+        .precio-total { font-weight: 700; color: #10b981; }
+        .action-buttons { display: flex; gap: 6px; }
+        .btn-action { width: 30px; height: 30px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-view { background: #dbeafe; color: #2563eb; }
+        .btn-view:hover { background: #2563eb; color: white; }
+        .btn-delete { background: #fee2e2; color: #dc2626; }
+        .btn-delete:hover { background: #dc2626; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 24px; width: 550px; max-width: 90%; padding: 0; overflow: hidden; }
+        .ticket { padding: 28px; }
+        .ticket-header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed #e5e7eb; }
+        .ticket-header h2 { font-size: 24px; color: #1f2937; }
+        .ticket-header h2 i { color: #10b981; margin-right: 8px; }
+        .ticket-header p { color: #6b7280; font-size: 12px; margin-top: 4px; }
+        .ticket-info { background: #f9fafb; padding: 16px; border-radius: 16px; margin-bottom: 20px; }
+        .ticket-info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+        .ticket-info-row .label { color: #6b7280; font-weight: 500; }
+        .ticket-info-row .value { font-weight: 600; color: #1f2937; }
+        .ticket-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .ticket-table th { text-align: left; font-size: 11px; color: #6b7280; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
+        .ticket-table td { padding: 8px 0; font-size: 13px; border-bottom: 1px solid #f0f0f0; }
+        .ticket-total { display: flex; justify-content: space-between; padding-top: 16px; border-top: 2px solid #e5e7eb; font-weight: 700; font-size: 18px; }
+        .ticket-footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 2px dashed #e5e7eb; font-size: 11px; color: #9ca3af; }
+        .modal-buttons { padding: 16px 28px 28px; display: flex; justify-content: flex-end; }
+        .btn-cerrar { background: #f3f4f6; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 500; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 14px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: 'Inter', sans-serif; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        textarea { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; font-family: 'Inter', sans-serif; resize: vertical; }
+        .btn-cancel { background: #f3f4f6; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
+        .btn-save { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; padding: 10px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 12px; color: white; z-index: 1100; animation: slideIn 0.3s ease; }
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .records-count { margin-top: 16px; font-size: 13px; color: #6b7280; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item active"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Ventas</h1>
+                    <p>Gestión de ventas del pet shop</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div><div class="user-name"><strong>Administrador</strong></div><div style="font-size: 12px; color: #6b7280;">admin@vet.com</div></div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Buscar por cliente o fecha..."></div>
+                <button class="btn-primary" onclick="abrirModalNuevo()"><i class="fas fa-plus"></i> Nueva Venta</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead><tr><th>FECHA</th><th>CLIENTE</th><th>ARTÍCULOS</th><th>TOTAL</th><th>MÉTODO PAGO</th><th>ESTADO</th><th>ACCIONES</th></tr></thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <!-- Modal Nueva Venta -->
+    <div id="modalNuevaVenta" class="modal">
+        <div class="modal-content">
+            <div class="ticket">
+                <div class="ticket-header"><h2><i class="fas fa-receipt"></i> Nueva Venta</h2><p>Complete los datos de la venta</p></div>
+                <form id="ventaForm">
+                    <input type="hidden" id="ventaId">
+                    <div class="form-group"><label>Cliente</label><input type="text" id="cliente" placeholder="Nombre del cliente" required></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Fecha</label><input type="date" id="fecha" required></div>
+                        <div class="form-group"><label>Método de pago</label><select id="metodoPago" required><option value="Tarjeta">Tarjeta</option><option value="Efectivo">Efectivo</option><option value="Yape">Yape</option></select></div>
+                    </div>
+                    <div class="form-group"><label>Artículos (formato: Producto - Cantidad - Precio)</label><textarea id="articulos" rows="3" placeholder="Ej: Royal Canin Adult - 2 - 89&#10;Shampoo medicado Virbac - 1 - 45" required></textarea></div>
+                    <div class="modal-buttons" style="padding: 0;"><button type="button" class="btn-cancel" onclick="cerrarModalNuevo()">Cancelar</button><button type="submit" class="btn-save">Registrar Venta</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalle (Ticket) -->
+    <div id="modalDetalle" class="modal">
+        <div class="modal-content"><div class="ticket"><div class="ticket-header"><h2><i class="fas fa-receipt"></i> VetAdmin</h2><p>Comprobante de venta</p></div><div id="detalleContent"></div><div class="modal-buttons"><button class="btn-cerrar" onclick="cerrarModalDetalle()">Cerrar</button></div></div></div>
+    </div>
+
+    <script>
+        let ventas = [
+            { id: 1, fecha: '2026-05-10', cliente: 'María García', articulos: [{ nombre: 'Royal Canin Adult', cantidad: 2, precio: 89 }, { nombre: 'Shampoo medicado Virbac', cantidad: 1, precio: 45 }], total: 223, metodoPago: 'Tarjeta', estado: 'Completado' },
+            { id: 2, fecha: '2026-05-12', cliente: 'Ana Torres', articulos: [{ nombre: 'Juguete Kong mordedor', cantidad: 2, precio: 28 }, { nombre: 'Antipulgas Frontline Plus', cantidad: 1, precio: 65 }], total: 121, metodoPago: 'Efectivo', estado: 'Completado' },
+            { id: 3, fecha: '2026-05-14', cliente: 'Carlos Rodríguez', articulos: [{ nombre: 'Whiskas Atún', cantidad: 3, precio: 35 }, { nombre: 'Arena sanitaria Cat Sand', cantidad: 2, precio: 22 }], total: 149, metodoPago: 'Yape', estado: 'Completado' },
+            { id: 4, fecha: '2026-05-15', cliente: 'María García', articulos: [{ nombre: 'Pro Plan Puppy', cantidad: 1, precio: 95 }, { nombre: 'Nutri-Vet Vitaminas', cantidad: 2, precio: 38 }], total: 171, metodoPago: 'Tarjeta', estado: 'Completado' },
+            { id: 5, fecha: '2026-05-16', cliente: 'Sofía Vargas', articulos: [{ nombre: 'Cama ortopédica L', cantidad: 1, precio: 85 }], total: 85, metodoPago: 'Efectivo', estado: 'Completado' },
+            { id: 6, fecha: '2026-05-18', cliente: 'Luis Mendoza', articulos: [{ nombre: 'Collar antiparasitario Seresto', cantidad: 1, precio: 120 }, { nombre: 'Antipulgas Frontline Plus', cantidad: 2, precio: 65 }], total: 250, metodoPago: 'Tarjeta', estado: 'Completado' },
+            { id: 7, fecha: '2026-05-19', cliente: 'Diego Flores', articulos: [{ nombre: 'Royal Canin Adult', cantidad: 3, precio: 89 }], total: 267, metodoPago: 'Yape', estado: 'Completado' },
+            { id: 8, fecha: '2026-05-20', cliente: 'Roberto Silva', articulos: [{ nombre: 'Shampoo medicado Virbac', cantidad: 2, precio: 45 }, { nombre: 'Correa entrenamiento', cantidad: 1, precio: 48 }], total: 138, metodoPago: 'Efectivo', estado: 'Completado' },
+            { id: 9, fecha: '2026-04-20', cliente: 'Valeria Cruz', articulos: [{ nombre: 'Comedero automático 5L', cantidad: 1, precio: 155 }], total: 155, metodoPago: 'Tarjeta', estado: 'Completado' },
+            { id: 10, fecha: '2026-04-25', cliente: 'María García', articulos: [{ nombre: 'Pro Plan Puppy', cantidad: 2, precio: 95 }, { nombre: 'Nutri-Vet Vitaminas', cantidad: 1, precio: 38 }], total: 228, metodoPago: 'Tarjeta', estado: 'Completado' }
+        ];
+        let siguienteId = 11;
+
+        function renderizarTabla(filtro) {
+            const tbody = document.getElementById('tablaBody');
+            let filtroLower = filtro ? filtro.toLowerCase() : '';
+            let filtrados = filtroLower === '' ? ventas : ventas.filter(v => v.cliente.toLowerCase().includes(filtroLower) || v.fecha.includes(filtroLower));
+            document.getElementById('recordsCount').innerHTML = 'Mostrando <strong>' + filtrados.length + '</strong> de <strong>' + ventas.length + '</strong> ventas';
+            if (filtrados.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;">No hay ventas registradas</td></tr>'; return; }
+            let html = '';
+            for (let v of filtrados) {
+                let numArticulos = v.articulos.reduce((s, a) => s + a.cantidad, 0);
+                html += '<tr>';
+                html += '<td>' + v.fecha + '</td>';
+                html += '<td><strong>' + v.cliente + '</strong></td>';
+                html += '<td>' + numArticulos + ' artículo(s)</td>';
+                html += '<td><span class="precio-total">S/ ' + v.total + '</span></td>';
+                html += '<td>' + v.metodoPago + '</td>';
+                html += '<td><span class="badge-estado"><i class="fas fa-check-circle"></i> ' + v.estado + '</span></td>';
+                html += '<td><div class="action-buttons"><button class="btn-action btn-view" onclick="verDetalle(' + v.id + ')"><i class="fas fa-eye"></i></button><button class="btn-action btn-delete" onclick="eliminarVenta(' + v.id + ')"><i class="fas fa-trash-alt"></i></button></div></td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function verDetalle(id) {
+            let venta = ventas.find(v => v.id === id);
+            if (venta) {
+                let articulosHtml = '';
+                for (let a of venta.articulos) {
+                    let subtotal = a.cantidad * a.precio;
+                    articulosHtml += '<tr><td>' + a.nombre + '</td><td>' + a.cantidad + '</td><td>S/ ' + a.precio + '</td><td>S/ ' + subtotal + '</td></tr>';
+                }
+                document.getElementById('detalleContent').innerHTML = `
+                    <div class="ticket-info">
+                        <div class="ticket-info-row"><span class="label">Cliente:</span><span class="value">${venta.cliente}</span></div>
+                        <div class="ticket-info-row"><span class="label">Fecha:</span><span class="value">${venta.fecha}</span></div>
+                        <div class="ticket-info-row"><span class="label">Método de pago:</span><span class="value">${venta.metodoPago}</span></div>
+                        <div class="ticket-info-row"><span class="label">Estado:</span><span class="value">${venta.estado}</span></div>
+                    </div>
+                    <table class="ticket-table"><thead><tr><th>Artículo</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>${articulosHtml}</tbody></table>
+                    <div class="ticket-total"><span>TOTAL</span><span>S/ ${venta.total}</span></div>
+                    <div class="ticket-footer">¡Gracias por su compra!<br>VetAdmin - Cuidando a tu mejor amigo</div>
+                `;
+                document.getElementById('modalDetalle').classList.add('active');
+            }
+        }
+
+        function eliminarVenta(id) {
+            if (confirm('¿Eliminar esta venta?')) { ventas = ventas.filter(v => v.id !== id); renderizarTabla(document.getElementById('searchInput').value); mostrarMensaje('Venta eliminada', 'success'); }
+        }
+
+        function abrirModalNuevo() { document.getElementById('ventaId').value = ''; document.getElementById('ventaForm').reset(); document.getElementById('fecha').value = new Date().toISOString().split('T')[0]; document.getElementById('modalNuevaVenta').classList.add('active'); }
+        function cerrarModalNuevo() { document.getElementById('modalNuevaVenta').classList.remove('active'); }
+        function cerrarModalDetalle() { document.getElementById('modalDetalle').classList.remove('active'); }
+
+        document.getElementById('ventaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let id = document.getElementById('ventaId').value;
+            let cliente = document.getElementById('cliente').value;
+            let fecha = document.getElementById('fecha').value;
+            let metodoPago = document.getElementById('metodoPago').value;
+            let lineas = document.getElementById('articulos').value.split('\n');
+            let articulos = [];
+            let total = 0;
+            for (let linea of lineas) {
+                if (linea.trim() === '') continue;
+                let partes = linea.split('-');
+                if (partes.length >= 3) {
+                    let nombre = partes[0].trim();
+                    let cantidad = parseInt(partes[1].trim());
+                    let precio = parseInt(partes[2].trim());
+                    articulos.push({ nombre, cantidad, precio });
+                    total += cantidad * precio;
+                }
+            }
+            if (articulos.length === 0) { mostrarMensaje('Ingrese al menos un artículo válido', 'error'); return; }
+            if (id !== '') {
+                let index = ventas.findIndex(v => v.id === parseInt(id));
+                if (index !== -1) ventas[index] = { ...ventas[index], cliente, fecha, articulos, total, metodoPago };
+                mostrarMensaje('Venta actualizada', 'success');
+            } else {
+                ventas.push({ id: siguienteId++, cliente, fecha, articulos, total, metodoPago, estado: 'Completado' });
+                mostrarMensaje('Venta creada', 'success');
+            }
+            cerrarModalNuevo();
+            renderizarTabla(document.getElementById('searchInput').value);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', e => renderizarTabla(e.target.value));
+        function mostrarMensaje(mensaje, tipo) { let toast = document.createElement('div'); toast.className = 'toast toast-' + tipo; toast.innerHTML = '<i class="fas ' + (tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle') + '"></i> ' + mensaje; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+        function cerrarSesion() { localStorage.clear(); window.location.href = '../index.html'; }
+        window.onclick = function(event) { if (event.target === document.getElementById('modalNuevaVenta')) cerrarModalNuevo(); if (event.target === document.getElementById('modalDetalle')) cerrarModalDetalle(); };
+        renderizarTabla('');
+    </script>
+</body>
+</html>

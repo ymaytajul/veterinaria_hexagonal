@@ -1,12 +1,11 @@
 <?php
-require_once __DIR__ . '/bootstrap.php';
+$controller = require_once __DIR__ . '/bootstrap.php';
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = explode('/', trim($_SERVER['PATH_INFO'] ?? '/', '/'));
 
 try {
-    $controller = require __DIR__ . '/bootstrap.php';
     
     if ($method === 'GET' && $path[0] === 'citas' && !isset($path[1])) {
         echo json_encode($controller->listar());

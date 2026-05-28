@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente — Mis Mascotas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body data-role="cliente">
+    <header class="site-header">
+        <div class="container">
+            <h1>Panel Cliente</h1>
+            <p>Gestión de tus mascotas</p>
+            <nav class="nav" aria-label="Principal">
+                <a href="../index.html">Inicio</a>
+                <a href="./mis-citas.html">Mis citas</a>
+                <a href="./mis-mascotas.html" class="is-active">Mis mascotas</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="alert-mascotas" class="alert" hidden role="alert"></div>
+        <div class="alert alert--info" role="status">
+            La API de mascotas aún no está implementada. Esta vista de cliente queda preparada.
+        </div>
+
+        <section class="card">
+            <h2>Registrar mascota</h2>
+            <form id="form-mascota" class="form-grid">
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div>
+                    <label for="especie">Especie</label>
+                    <input type="text" id="especie" name="especie" required>
+                </div>
+                <div>
+                    <label for="raza">Raza</label>
+                    <input type="text" id="raza" name="raza">
+                </div>
+                <div>
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" name="edad" min="0" max="50">
+                </div>
+                <div style="align-self: end;">
+                    <button type="submit" class="btn btn--primary">Guardar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>requireRole('cliente');</script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/mascotas.js"></script>
+</body>
+</html>

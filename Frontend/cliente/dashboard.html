@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel | Mis Patitas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; }
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .sidebar-header h2 { font-size: 22px; }
+        .sidebar-header h2 i { color: #10b981; margin-right: 8px; }
+        .sidebar-nav { padding: 20px 0; }
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; }
+        .nav-item i { width: 22px; }
+        .logout-item { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; }
+        .main-content { flex: 1; margin-left: 280px; padding: 28px 32px; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .page-title h1 { font-size: 28px; font-weight: 700; color: #1f2937; }
+        .user-info { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 20px; border-radius: 40px; }
+        .user-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: white; }
+        .welcome-card { background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 24px; padding: 32px; color: white; margin-bottom: 32px; }
+        .welcome-card h2 { font-size: 24px; margin-bottom: 8px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+        .stat-card { background: white; border-radius: 20px; padding: 24px; text-align: center; }
+        .stat-card i { font-size: 36px; color: #3b82f6; margin-bottom: 12px; }
+        .stat-card h3 { font-size: 28px; font-weight: 700; }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; margin-right: 12px; }
+        .mock-badge { background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; display: inline-block; margin-left: 12px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> Mis Patitas</h2>
+                <span>Área de Cliente</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i><span>Mi Panel</span></a>
+                <a href="mis-mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mis Mascotas</span></a>
+                <a href="mis-citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Mis Citas</span></a>
+                <div class="nav-item logout-item" onclick="window.auth.logout()"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Mi Panel <span class="mock-badge"><i class="fas fa-flask"></i> Modo Demo</span></h1>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div>
+                        <div class="user-name" id="userName"><strong>Cliente</strong></div>
+                        <div style="font-size: 12px;">cliente@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="welcome-card">
+                <h2>¡Bienvenido, <span id="welcomeName">Cliente</span>!</h2>
+                <p>Aquí podrás gestionar tus mascotas y citas veterinarias. <strong>(Modo demostración - backend en desarrollo)</strong></p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><i class="fas fa-dog"></i><h3 id="totalMascotas">2</h3><p>Mascotas registradas</p></div>
+                <div class="stat-card"><i class="fas fa-calendar-alt"></i><h3 id="totalCitas">3</h3><p>Citas programadas</p></div>
+                <div class="stat-card"><i class="fas fa-clock"></i><h3 id="citasPendientes">1</h3><p>Citas pendientes</p></div>
+            </div>
+
+            <div>
+                <button class="btn-primary" onclick="alert('Funcionalidad en desarrollo')"><i class="fas fa-plus"></i> Registrar Mascota</button>
+                <button class="btn-primary" onclick="alert('Funcionalidad en desarrollo')"><i class="fas fa-calendar-plus"></i> Agendar Cita</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const userName = localStorage.getItem('user_name') || 'Cliente';
+        document.getElementById('userName').innerHTML = `<strong>${userName}</strong>`;
+        document.getElementById('welcomeName').innerText = userName;
+        document.getElementById('userAvatar').innerText = userName.charAt(0);
+    </script>
+</body>
+</html>

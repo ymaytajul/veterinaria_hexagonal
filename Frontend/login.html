@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Patitas - Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoración de fondo */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -200px;
+            left: -200px;
+        }
+
+        /* Tarjeta principal */
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 32px;
+            padding: 48px 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Logo y título */
+        .logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .logo-icon i {
+            font-size: 36px;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Formulario */
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #667eea;
+            font-size: 12px;
+        }
+
+        /* Input container - diseño moderno */
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            color: #9ca3af;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-field:focus + .input-icon {
+            color: #667eea;
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        /* Botón */
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Credenciales demo */
+        .demo-credentials {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .demo-title {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .demo-title i {
+            color: #f59e0b;
+        }
+
+        .credential-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f3f4f6;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .credential-badge i {
+            color: #10b981;
+            font-size: 12px;
+        }
+
+        .credential-badge span {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            margin-left: 6px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* Mensajes de error */
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #dc2626;
+        }
+
+        /* Enlace a registro */
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+            
+            .input-field {
+                padding: 14px 14px 14px 44px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo -->
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <h1>Mis Patitas</h1>
+                <p>Accede a tu cuenta</p>
+            </div>
+
+            <!-- Mensaje de error (oculto inicialmente) -->
+            <div id="errorMessage" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText">Credenciales incorrectas</span>
+            </div>
+
+            <!-- Formulario -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-envelope"></i> 
+                        CORREO ELECTRÓNICO
+                    </label>
+                    <div class="input-container">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" 
+                               id="email" 
+                               class="input-field" 
+                               placeholder="correo@ejemplo.com" 
+                               required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-lock"></i> 
+                        CONTRASEÑA
+                    </label>
+                    <div class="input-container">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" 
+                               id="password" 
+                               class="input-field" 
+                               placeholder="••••••••" 
+                               required>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-arrow-right-to-bracket"></i>
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Enlace a registro -->
+            <div class="register-link">
+                ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+            </div>
+
+            <!-- Credenciales demo -->
+            <div class="demo-credentials">
+                <div class="demo-title">
+                    <i class="fas fa-info-circle"></i>
+                    Credenciales de prueba
+                </div>
+                <div class="credential-badge" style="margin-bottom: 8px;">
+                    <i class="fas fa-user-shield"></i>
+                    Administrador: admin@vet.com
+                    <span>admin123</span>
+                </div>
+                <div class="credential-badge">
+                    <i class="fas fa-user"></i>
+                    Cliente: cliente@vet.com
+                    <span>cliente123</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorDiv.style.display = 'none';
+            
+            // Mostrar loading en el botón
+            const btn = document.querySelector('.login-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...';
+            btn.disabled = true;
+            
+            const ok = await window.auth.login(email, password);
+            if (!ok) {
+                errorText.textContent = 'Credenciales incorrectas. Prueba con las credenciales de prueba.';
+                errorDiv.style.display = 'flex';
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+    </script>
+</body>
+</html>

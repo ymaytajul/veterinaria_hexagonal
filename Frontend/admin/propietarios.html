@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propietarios | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+            cursor: pointer;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        /* Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        /* Tabla - AHORA MÁS ANCHA */
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Columnas con ancho fijo para mejor legibilidad */
+        .data-table th:nth-child(1), .data-table td:nth-child(1) { min-width: 180px; }
+        .data-table th:nth-child(2), .data-table td:nth-child(2) { min-width: 200px; }
+        .data-table th:nth-child(3), .data-table td:nth-child(3) { min-width: 140px; }
+        .data-table th:nth-child(4), .data-table td:nth-child(4) { min-width: 220px; }
+        .data-table th:nth-child(5), .data-table td:nth-child(5) { min-width: 110px; }
+
+        /* Badge de fecha */
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Botones de acción */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #dc2626;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Contador de registros */
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 500px;
+            max-width: 90%;
+            padding: 28px;
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item active"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Propietarios</h1>
+                    <p>Gestión de clientes y propietarios de mascotas</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, email o teléfono...">
+                </div>
+                <button class="btn-primary" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus"></i> Nuevo Propietario
+                </button>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>CORREO</th>
+                            <th>TELÉFONO</th>
+                            <th>DIRECCIÓN</th>
+                            <th>REGISTRADO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody">
+                        <!-- JS llena aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-plus"></i> <span id="modalTitulo">Nuevo Propietario</span></h2>
+            <form id="propietarioForm">
+                <input type="hidden" id="propietarioId">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Ej: María García" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="telefono" placeholder="+51 987 654 321" required>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" id="direccion" placeholder="Av. Principal 123" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos según Figma
+        let propietarios = [
+            { id: 1, nombre: 'María García', email: 'maria@gmail.com', telefono: '+51 987 654 321', direccion: 'Av. Lima 234, San Isidro', registrado: '2024-01-15' },
+            { id: 2, nombre: 'Carlos Rodríguez', email: 'carlos@gmail.com', telefono: '+51 976 543 210', direccion: 'Jr. Puno 567, Miraflores', registrado: '2024-02-20' },
+            { id: 3, nombre: 'Ana Torres', email: 'ana@gmail.com', telefono: '+51 965 432 109', direccion: 'Calle Los Olivos 89, Surco', registrado: '2024-03-10' },
+            { id: 4, nombre: 'Luis Mendoza', email: 'luis@gmail.com', telefono: '+51 954 321 098', direccion: 'Av. Arequipa 1234, Lince', registrado: '2024-03-25' },
+            { id: 5, nombre: 'Sofía Vargas', email: 'sofia@gmail.com', telefono: '+51 943 210 987', direccion: 'Jr. Tacna 456, Barranco', registrado: '2024-04-05' },
+            { id: 6, nombre: 'Diego Flores', email: 'diego@gmail.com', telefono: '+51 932 109 876', direccion: 'Av. Benavides 789, Miraflores', registrado: '2024-04-18' },
+            { id: 7, nombre: 'Valeria Cruz', email: 'valeria@gmail.com', telefono: '+51 921 098 765', direccion: 'Calle Colón 321, Pueblo Libre', registrado: '2024-05-02' },
+            { id: 8, nombre: 'Roberto Silva', email: 'roberto@gmail.com', telefono: '+51 910 987 654', direccion: 'Jr. Camaná 654, Centro', registrado: '2024-05-15' }
+        ];
+
+        let siguienteId = 9;
+
+        function renderizarTabla(filtro = '') {
+            const tbody = document.getElementById('tablaBody');
+            const filtroLower = filtro.toLowerCase();
+            
+            const filtrados = propietarios.filter(p => 
+                p.nombre.toLowerCase().includes(filtroLower) ||
+                p.email.toLowerCase().includes(filtroLower) ||
+                p.telefono.includes(filtroLower)
+            );
+            
+            document.getElementById('recordsCount').innerHTML = `Mostrando <strong>${filtrados.length}</strong> de <strong>${propietarios.length}</strong> propietarios`;
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No hay propietarios registrados</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = filtrados.map(p => `
+                <tr>
+                    <td><strong>${escapeHtml(p.nombre)}</strong></td>
+                    <td>${escapeHtml(p.email)}</td>
+                    <td>${escapeHtml(p.telefono)}</td>
+                    <td>${escapeHtml(p.direccion)}</td>
+                    <td><span class="date-badge"><i class="fas fa-calendar-alt"></i> ${p.registrado}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-delete" onclick="eliminarPropietario(${p.id})" title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function escapeHtml(texto) {
+            if (!texto) return '';
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        function abrirModalNuevo() {
+            document.getElementById('modalTitulo').innerText = 'Nuevo Propietario';
+            document.getElementById('propietarioId').value = '';
+            document.getElementById('propietarioForm').reset();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function eliminarPropietario(id) {
+            if (confirm('¿Eliminar este propietario? También se eliminarán sus mascotas asociadas.')) {
+                propietarios = propietarios.filter(p => p.id !== id);
+                renderizarTabla(document.getElementById('searchInput').value);
+                mostrarMensaje('Propietario eliminado', 'success');
+            }
+        }
+
+        document.getElementById('propietarioForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('propietarioId').value;
+            const hoy = new Date().toISOString().split('T')[0];
+            
+            const nuevoPropietario = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                direccion: document.getElementById('direccion').value,
+                registrado: hoy
+            };
+            
+            if (id) {
+                const index = propietarios.findIndex(p => p.id === parseInt(id));
+                if (index !== -1) {
+                    propietarios[index] = { ...propietarios[index], ...nuevoPropietario };
+                    mostrarMensaje('Propietario actualizado', 'success');
+                }
+            } else {
+                nuevoPropietario.id = siguienteId++;
+                propietarios.push(nuevoPropietario);
+                mostrarMensaje('Propietario creado', 'success');
+            }
+            
+            cerrarModal();
+            renderizarTabla(document.getElementById('searchInput').value);
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderizarTabla(e.target.value);
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${tipo}`;
+            toast.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${mensaje}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) cerrarModal();
+        };
+
+        renderizarTabla();
+    </script>
+</body>
+</html>

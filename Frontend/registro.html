@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta | Mis Patitas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo p {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .btn-outline {
+            border: 2px solid #3b82f6;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary-nav {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        /* Main Content - Centrado */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px 36px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .logo-center {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .logo-icon i {
+            font-size: 30px;
+            color: white;
+        }
+
+        .logo-center h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .logo-center p {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message, .success-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            border-left: 3px solid #dc2626;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 3px solid #10b981;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 60px 32px 30px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+        }
+
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col h3 i {
+            margin-right: 8px;
+        }
+
+        .footer-col p {
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .footer-col p i {
+            margin-right: 8px;
+            width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #9ca3af;
+            font-size: 20px;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .footer-bottom a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .register-card {
+                padding: 32px 24px;
+            }
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <h1><i class="fas fa-paw"></i> Mis Patitas</h1>
+                <p>Servicios de Veterinaria | Tienda de Mascotas</p>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#servicios">Servicios</a>
+                <a href="index.html#productos">Productos</a>
+                <a href="index.html#contacto">Contacto</a>
+                <button class="btn-outline" onclick="window.location.href='login.html'">Iniciar Sesión</button>
+                <button class="btn-primary-nav" onclick="window.location.href='registro.html'">Registrarse</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="register-container">
+            <div class="register-card">
+                <div class="logo-center">
+                    <div class="logo-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h1>Crear Cuenta</h1>
+                    <p>Únete a nuestra comunidad</p>
+                </div>
+
+                <div id="messageArea"></div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label>Nombres Completos</label>
+                        <input type="text" id="nombres" class="input-field" placeholder="Juan Pérez" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="email" class="input-field" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="telefono" class="input-field" placeholder="999 888 777" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="password" class="input-field" placeholder="********" required>
+                    </div>
+
+                    <button type="submit" class="register-btn">
+                        <i class="fas fa-user-plus"></i>
+                        Crear Cuenta
+                    </button>
+                </form>
+
+                <div class="login-link">
+                    ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3><i class="fas fa-paw"></i> Mis Patitas</h3>
+                <p>Tu veterinaria de confianza, cuidando de tus mejores amigos desde 2020.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-phone"></i> +51 999 888 777</p>
+                <p><i class="fas fa-envelope"></i> info@mispatitas.pe</p>
+            </div>
+            <div class="footer-col">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Mis Patitas. Todos los derechos reservados. | <a href="#">Términos y Condiciones</a> | <a href="#">Política de Privacidad</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Obtener URL base dinámicamente
+        const path = window.location.pathname;
+        const projectBase = path.includes('/Frontend/')
+            ? path.split('/Frontend/')[0]
+            : path.replace(/\/[^/]*$/, '');
+        const API_BASE = `${projectBase}/index.php`;
+
+        const messageArea = document.getElementById('messageArea');
+
+        function showMessage(message, type) {
+            messageArea.innerHTML = `<div class="${type === 'error' ? 'error-message' : 'success-message'}">
+                <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                <span>${message}</span>
+            </div>`;
+            
+            setTimeout(() => {
+                const msgDiv = messageArea.querySelector('div');
+                if (msgDiv) msgDiv.style.opacity = '0';
+                setTimeout(() => messageArea.innerHTML = '', 500);
+            }, 5000);
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const nombres = document.getElementById('nombres').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (password.length < 6) {
+                showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            const btn = document.querySelector('.register-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando cuenta...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nombres: nombres,
+                        email: email,
+                        telefono: telefono,
+                        password: password,
+                        rol: 'cliente'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showMessage('✅ ¡Registro exitoso! Redirigiendo al login...', 'success');
+                    document.getElementById('registerForm').reset();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    const errorMsg = data.error || 'Error al registrar usuario';
+                    showMessage(errorMsg, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error de conexión con el servidor', 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Veterinarios | Mis Patitas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            z-index: 1000;
+            padding: 16px 32px;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            cursor: pointer;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo p {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .btn-outline {
+            border: 2px solid #3b82f6;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary-nav {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 32px 60px;
+            background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1f2937, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero .btn-large {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hero .btn-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59,130,246,0.3);
+        }
+
+        /* Sección de Servicios */
+        .services-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 32px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 48px;
+            color: #1f2937;
+        }
+
+        /* Grid de servicios */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #e5e7eb;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .service-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .service-content {
+            padding: 24px;
+        }
+
+        .service-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .service-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .service-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .service-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .service-duration {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .service-duration i {
+            color: #3b82f6;
+        }
+
+        .btn-agendar {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-agendar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 60px 32px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+        }
+
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col p {
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #9ca3af;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: #3b82f6;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .footer-bottom a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .service-details {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <h1><i class="fas fa-paw"></i> Mis Patitas</h1>
+                <p>Servicios de Veterinaria | Tienda de Mascotas</p>
+            </div>
+            <div class="nav-links">
+                <a onclick="window.location.href='index.html'">Inicio</a>
+                <a onclick="window.location.href='servicios.html'">Servicios</a>
+                <a onclick="window.location.href='tienda.html'">Tienda</a>
+                <a onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contacto</a>
+                <button class="btn-outline" onclick="window.location.href='login.html'">Iniciar Sesión</button>
+                <button class="btn-primary-nav" onclick="window.location.href='registro.html'">Registrarse</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Servicios Veterinarios</h1>
+        <p>Servicios profesionales para el cuidado integral de tu mascota</p>
+        <button class="btn-large" onclick="window.location.href='login.html'">Crear Nueva Cita</button>
+    </section>
+
+    <!-- Servicios -->
+    <section class="services-section">
+        <div class="services-grid">
+            <!-- Servicio 1 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Vacunación Completa</h3>
+                    <p class="service-description">Paquete completo de vacunas esenciales para tu mascota</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 150.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 30 min</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+
+            <!-- Servicio 2 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Consulta General</h3>
+                    <p class="service-description">Revisión completa del estado de salud de tu mascota</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 80.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 45 min</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+
+            <!-- Servicio 3 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Baño y Peluquería</h3>
+                    <p class="service-description">Servicio completo de limpieza y corte de pelo</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 60.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 1 hora</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+
+            <!-- Servicio 4 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Desparasitación</h3>
+                    <p class="service-description">Tratamiento completo contra parásitos internos y externos</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 45.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 20 min</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+
+            <!-- Servicio 5 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1584551246679-258d6b7d4fea?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Esterilización</h3>
+                    <p class="service-description">Procedimiento quirúrgico de esterilización seguro</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 280.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 2 horas</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+
+            <!-- Servicio 6 -->
+            <div class="service-card">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1545249390-6bdfa286032f?w=400&h=200&fit=crop');"></div>
+                <div class="service-content">
+                    <h3 class="service-title">Control Dental</h3>
+                    <p class="service-description">Limpieza dental profunda y revisión bucal</p>
+                    <div class="service-details">
+                        <span class="service-price">S/ 95.00</span>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 40 min</span>
+                    </div>
+                    <button class="btn-agendar" onclick="window.location.href='login.html'">Agendar Cita</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3><i class="fas fa-paw"></i> Mis Patitas</h3>
+                <p>Tu veterinaria de confianza, cuidando de tus mejores amigos desde 2020.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-phone"></i> +51 999 888 777</p>
+                <p><i class="fas fa-envelope"></i> info@mispatitas.pe</p>
+            </div>
+            <div class="footer-col">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Mis Patitas. Todos los derechos reservados. | <a href="#">Términos y Condiciones</a> | <a href="#">Política de Privacidad</a></p>
+        </div>
+    </footer>
+</body>
+</html>

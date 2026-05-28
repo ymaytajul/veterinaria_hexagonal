@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | VetAdmin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 22px;
+        }
+
+        .sidebar-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        .sidebar-header span {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-top: 6px;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 22px;
+        }
+
+        .logout-item {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+        }
+
+        .logout-item:hover {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e5e7eb;
+            min-width: 280px;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge-categoria {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .categoria-alimento { background: #dbeafe; color: #1e40af; }
+        .categoria-accesorio { background: #fce7f3; color: #9d174d; }
+        .categoria-higiene { background: #d1fae5; color: #065f46; }
+        .categoria-juguete { background: #fed7aa; color: #9a3412; }
+        .categoria-medicina { background: #fef3c7; color: #92400e; }
+
+        .precio-venta {
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .precio-costo {
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        .stock-bajo {
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        .stock-normal {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 600px;
+            max-width: 90%;
+            padding: 28px;
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: white;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .records-count {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-paw"></i> VetAdmin</h2>
+                <span>Panel de Control</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="propietarios.html" class="nav-item"><i class="fas fa-users"></i><span>Propietarios</span></a>
+                <a href="mascotas.html" class="nav-item"><i class="fas fa-dog"></i><span>Mascotas</span></a>
+                <a href="citas.html" class="nav-item"><i class="fas fa-calendar-alt"></i><span>Citas</span></a>
+                <a href="servicios.html" class="nav-item"><i class="fas fa-syringe"></i><span>Servicios</span></a>
+                <a href="inventario.html" class="nav-item active"><i class="fas fa-boxes"></i><span>Inventario</span></a>
+                <a href="ventas.html" class="nav-item"><i class="fas fa-chart-simple"></i><span>Ventas</span></a>
+                <a href="historial.html" class="nav-item"><i class="fas fa-clock-rotate-left"></i><span>Historial</span></a>
+                <a href="reportes.html" class="nav-item"><i class="fas fa-file-alt"></i><span>Reportes</span></a>
+                <div class="nav-item logout-item" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-header">
+                <div class="page-title">
+                    <h1>Inventario Pet Shop</h1>
+                    <p>Gestión de productos del pet shop</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div class="user-name"><strong>Administrador</strong></div>
+                        <div style="font-size: 12px; color: #6b7280;">admin@vet.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, categoría o marca...">
+                </div>
+                <button class="btn-primary" onclick="abrirModalNuevo()">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>CATEGORÍA</th>
+                            <th>MARCA</th>
+                            <th>PRECIO</th>
+                            <th>COSTO</th>
+                            <th>STOCK</th>
+                            <th>UNIDAD</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBody"></tbody>
+                </table>
+            </div>
+            <div class="records-count" id="recordsCount"></div>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-box"></i> <span id="modalTitulo">Nuevo Producto</span></h2>
+            <form id="productoForm">
+                <input type="hidden" id="productoId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre del producto</label>
+                        <input type="text" id="nombre" placeholder="Ej: Royal Canin Adult" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="categoria" required>
+                            <option value="Alimento">Alimento</option>
+                            <option value="Accesorio">Accesorio</option>
+                            <option value="Higiene">Higiene</option>
+                            <option value="Juguete">Juguete</option>
+                            <option value="Medicina">Medicina</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" id="marca" placeholder="Ej: Royal Canin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Unidad</label>
+                        <select id="unidad" required>
+                            <option value="kg">kg</option>
+                            <option value="paq">paq</option>
+                            <option value="und">und</option>
+                            <option value="bot">bot</option>
+                            <option value="pip">pip</option>
+                            <option value="fra">fra</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio venta (S/)</label>
+                        <input type="number" id="precio" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Costo (S/)</label>
+                        <input type="number" id="costo" placeholder="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Stock</label>
+                    <input type="number" id="stock" placeholder="0" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Productos según Figma
+        let productos = [
+            { id: 1, nombre: 'Royal Canin Adult', categoria: 'Alimento', marca: 'Royal Canin', precio: 89, costo: 55, stock: 45, unidad: 'kg' },
+            { id: 2, nombre: 'Whiskas Atún', categoria: 'Alimento', marca: 'Whiskas', precio: 35, costo: 20, stock: 80, unidad: 'paq' },
+            { id: 3, nombre: 'Collar antiparasitario Seresto', categoria: 'Accesorio', marca: 'Seresto', precio: 120, costo: 70, stock: 20, unidad: 'und' },
+            { id: 4, nombre: 'Shampoo medicado Virbac', categoria: 'Higiene', marca: 'Virbac', precio: 45, costo: 25, stock: 35, unidad: 'bot' },
+            { id: 5, nombre: 'Juguete Kong mordedor', categoria: 'Juguete', marca: 'Kong', precio: 28, costo: 15, stock: 30, unidad: 'und' },
+            { id: 6, nombre: 'Antipulgas Frontline Plus', categoria: 'Medicina', marca: 'Frontline', precio: 65, costo: 38, stock: 50, unidad: 'pip' },
+            { id: 7, nombre: 'Cama ortopédica L', categoria: 'Accesorio', marca: 'PetHome', precio: 85, costo: 45, stock: 15, unidad: 'und' },
+            { id: 8, nombre: 'Comedero automático 5L', categoria: 'Accesorio', marca: 'PetTech', precio: 155, costo: 90, stock: 8, unidad: 'und' },
+            { id: 9, nombre: 'Pro Plan Puppy', categoria: 'Alimento', marca: 'Purina', precio: 95, costo: 60, stock: 38, unidad: 'kg' },
+            { id: 10, nombre: 'Nutri-Vet Vitaminas', categoria: 'Medicina', marca: 'Nutri-Vet', precio: 38, costo: 20, stock: 25, unidad: 'fra' },
+            { id: 11, nombre: 'Arena sanitaria Cat Sand', categoria: 'Higiene', marca: 'Cat Sand', precio: 22, costo: 12, stock: 60, unidad: 'kg' }
+        ];
+
+        let siguienteId = 12;
+
+        function getCategoriaClass(categoria) {
+            const clases = {
+                'Alimento': 'categoria-alimento',
+                'Accesorio': 'categoria-accesorio',
+                'Higiene': 'categoria-higiene',
+                'Juguete': 'categoria-juguete',
+                'Medicina': 'categoria-medicina'
+            };
+            return clases[categoria] || 'categoria-alimento';
+        }
+
+        function getCategoriaIcono(categoria) {
+            const iconos = {
+                'Alimento': 'fa-bowl-food',
+                'Accesorio': 'fa-shirt',
+                'Higiene': 'fa-soap',
+                'Juguete': 'fa-gamepad',
+                'Medicina': 'fa-capsules'
+            };
+            return iconos[categoria] || 'fa-tag';
+        }
+
+        function getStockClass(stock) {
+            if (stock < 10) return 'stock-bajo';
+            return 'stock-normal';
+        }
+
+        function renderizarTabla(filtro) {
+            const tbody = document.getElementById('tablaBody');
+            let filtroLower = '';
+            if (filtro) {
+                filtroLower = filtro.toLowerCase();
+            }
+            
+            let filtrados = [];
+            if (filtroLower === '') {
+                filtrados = productos;
+            } else {
+                for (let i = 0; i < productos.length; i++) {
+                    const p = productos[i];
+                    if (p.nombre.toLowerCase().includes(filtroLower) ||
+                        p.categoria.toLowerCase().includes(filtroLower) ||
+                        p.marca.toLowerCase().includes(filtroLower)) {
+                        filtrados.push(p);
+                    }
+                }
+            }
+            
+            const total = productos.length;
+            const mostrar = filtrados.length;
+            document.getElementById('recordsCount').innerHTML = 'Mostrando <strong>' + mostrar + '</strong> de <strong>' + total + '</strong> productos';
+            
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">No hay productos registrados</td><td style="display: none;"></td><td style="display: none;"></td><td style="display: none;"></td><td style="display: none;"></td><td style="display: none;"></td><td style="display: none;"></td><td style="display: none;"></td></tr>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < filtrados.length; i++) {
+                const p = filtrados[i];
+                const categoriaClass = getCategoriaClass(p.categoria);
+                const categoriaIcono = getCategoriaIcono(p.categoria);
+                const stockClass = getStockClass(p.stock);
+                
+                html += '<tr>';
+                html += '<td><strong>' + p.nombre + '</strong></td>';
+                html += '<td><span class="badge-categoria ' + categoriaClass + '"><i class="fas ' + categoriaIcono + '"></i> ' + p.categoria + '</span></td>';
+                html += '<td>' + p.marca + '</td>';
+                html += '<td><span class="precio-venta">S/ ' + p.precio + '</span></td>';
+                html += '<td><span class="precio-costo">S/ ' + p.costo + '</span></td>';
+                html += '<td><span class="' + stockClass + '"><i class="fas fa-box"></i> ' + p.stock + '</span></td>';
+                html += '<td>' + p.unidad + '</td>';
+                html += '<td><div class="action-buttons">';
+                html += '<button class="btn-action btn-edit" onclick="editarProducto(' + p.id + ')"><i class="fas fa-edit"></i></button>';
+                html += '<button class="btn-action btn-delete" onclick="eliminarProducto(' + p.id + ')"><i class="fas fa-trash-alt"></i></button>';
+                html += '</div></td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
+        }
+
+        function abrirModalNuevo() {
+            document.getElementById('modalTitulo').innerText = 'Nuevo Producto';
+            document.getElementById('productoId').value = '';
+            document.getElementById('productoForm').reset();
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function editarProducto(id) {
+            let producto = null;
+            for (let i = 0; i < productos.length; i++) {
+                if (productos[i].id === id) {
+                    producto = productos[i];
+                    break;
+                }
+            }
+            if (producto) {
+                document.getElementById('modalTitulo').innerText = 'Editar Producto';
+                document.getElementById('productoId').value = producto.id;
+                document.getElementById('nombre').value = producto.nombre;
+                document.getElementById('categoria').value = producto.categoria;
+                document.getElementById('marca').value = producto.marca;
+                document.getElementById('precio').value = producto.precio;
+                document.getElementById('costo').value = producto.costo;
+                document.getElementById('stock').value = producto.stock;
+                document.getElementById('unidad').value = producto.unidad;
+                document.getElementById('modal').classList.add('active');
+            }
+        }
+
+        function eliminarProducto(id) {
+            if (confirm('¿Eliminar este producto?')) {
+                let nuevosProductos = [];
+                for (let i = 0; i < productos.length; i++) {
+                    if (productos[i].id !== id) {
+                        nuevosProductos.push(productos[i]);
+                    }
+                }
+                productos = nuevosProductos;
+                const searchValue = document.getElementById('searchInput').value;
+                renderizarTabla(searchValue);
+                mostrarMensaje('Producto eliminado', 'success');
+            }
+        }
+
+        document.getElementById('productoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('productoId').value;
+            
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                categoria: document.getElementById('categoria').value,
+                marca: document.getElementById('marca').value,
+                precio: parseInt(document.getElementById('precio').value),
+                costo: parseInt(document.getElementById('costo').value),
+                stock: parseInt(document.getElementById('stock').value),
+                unidad: document.getElementById('unidad').value
+            };
+            
+            if (id !== '') {
+                for (let i = 0; i < productos.length; i++) {
+                    if (productos[i].id === parseInt(id)) {
+                        productos[i] = { ...productos[i], ...datos };
+                        break;
+                    }
+                }
+                mostrarMensaje('Producto actualizado', 'success');
+            } else {
+                datos.id = siguienteId;
+                siguienteId++;
+                productos.push(datos);
+                mostrarMensaje('Producto creado', 'success');
+            }
+            
+            cerrarModal();
+            const searchValue = document.getElementById('searchInput').value;
+            renderizarTabla(searchValue);
+        });
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            renderizarTabla(e.target.value);
+        });
+
+        function mostrarMensaje(mensaje, tipo) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-' + tipo;
+            const icon = (tipo === 'success') ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = '<i class="fas ' + icon + '"></i> ' + mensaje;
+            document.body.appendChild(toast);
+            setTimeout(function() {
+                toast.remove();
+            }, 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = '../index.html';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        };
+
+        renderizarTabla('');
+    </script>
+</body>
+</html>
