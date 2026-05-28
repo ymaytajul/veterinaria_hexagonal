@@ -18,8 +18,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+// Usamos safeLoad() para que no lance error si el archivo .env no existe en Railway
+$dotenv->safeLoad();
 
 // Dependencias
 $pdo = new PDO(
