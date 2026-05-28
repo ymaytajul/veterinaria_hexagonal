@@ -17,6 +17,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         '7aed44d824e149ce152c0fb82af9379a' => __DIR__ . '/..' . '/colinodell/json5/src/global.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'ea591e46ac6aa4e444b62c2a823e0484' => __DIR__ . '/..' . '/sanmai/later/src/functions.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '606a39d89246991a373564698c2d8383' => __DIR__ . '/..' . '/symfony/polyfill-php85/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '72243e5536b63e298acb6476f01f1aff' => __DIR__ . '/..' . '/thecodingmachine/safe/lib/special_cases.php',
@@ -114,6 +115,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'S' =>
         array (
             'Symfony\\Polyfill\\Php85\\' => 23,
+            'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
@@ -141,6 +143,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
             'Psr\\Clock\\' => 10,
             'Pipeline\\' => 9,
             'PhpParser\\' => 10,
+            'PhpOption\\' => 10,
         ),
         'O' =>
         array (
@@ -167,6 +170,10 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
             'Infection\\AbstractTestFramework\\' => 32,
             'Infection\\' => 10,
         ),
+        'G' =>
+        array (
+            'GrahamCampbell\\ResultType\\' => 26,
+        ),
         'F' =>
         array (
             'Fidry\\CpuCoreCounter\\' => 21,
@@ -174,6 +181,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'D' =>
         array (
             'DuoClock\\' => 9,
+            'Dotenv\\' => 7,
             'Domain\\' => 7,
             'DeepCopy\\' => 9,
             'DIContainer\\' => 12,
@@ -212,6 +220,10 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'Symfony\\Polyfill\\Php85\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php85',
+        ),
+        'Symfony\\Polyfill\\Php80\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
         'Symfony\\Polyfill\\Mbstring\\' =>
         array (
@@ -309,6 +321,10 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
+        'PhpOption\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
         'OndraM\\CiDetector\\' =>
         array (
             0 => __DIR__ . '/..' . '/ondram/ci-detector/src',
@@ -349,6 +365,10 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         array (
             0 => __DIR__ . '/..' . '/infection/infection/src',
         ),
+        'GrahamCampbell\\ResultType\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
+        ),
         'Fidry\\CpuCoreCounter\\' =>
         array (
             0 => __DIR__ . '/..' . '/fidry/cpu-core-counter/src',
@@ -356,6 +376,10 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'DuoClock\\' =>
         array (
             0 => __DIR__ . '/..' . '/sanmai/duoclock/src',
+        ),
+        'Dotenv\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
         'Domain\\' =>
         array (
@@ -416,6 +440,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
     );
 
     public static $classMap = array (
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DelayedTargetValidation' => __DIR__ . '/..' . '/symfony/polyfill-php85/Resources/stubs/DelayedTargetValidation.php',
         'Filter\\FilterException' => __DIR__ . '/..' . '/symfony/polyfill-php85/Resources/stubs/Filter/FilterException.php',
@@ -1387,6 +1412,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'PharIo\\Version\\VersionConstraintParser' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintParser.php',
         'PharIo\\Version\\VersionConstraintValue' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintValue.php',
         'PharIo\\Version\\VersionNumber' => __DIR__ . '/..' . '/phar-io/version/src/VersionNumber.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'Safe\\DateTime' => __DIR__ . '/..' . '/thecodingmachine/safe/lib/DateTime.php',
         'Safe\\DateTimeImmutable' => __DIR__ . '/..' . '/thecodingmachine/safe/lib/DateTimeImmutable.php',
         'Safe\\Exceptions\\ApacheException' => __DIR__ . '/..' . '/thecodingmachine/safe/generated/Exceptions/ApacheException.php',
@@ -1673,7 +1699,7 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
-        'Stringable' => __DIR__ . '/..' . '/marc-mabe/php-enum/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',
         'TheSeer\\Tokenizer\\NamespaceUriException' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUriException.php',
@@ -1682,6 +1708,8 @@ class ComposerStaticInit5e77af8d431fbf5780649199e0fa8f21
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

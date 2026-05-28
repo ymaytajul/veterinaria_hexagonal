@@ -14,49 +14,19 @@ spl_autoload_register(function ($class) {
     }
 });
 
-function loadEnv(string $path): void
-{
-    if (!is_readable($path)) {
-        return;
-    }
+require_once __DIR__ . '/vendor/autoload.php';
 
-    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-        $line = trim($line);
-        if ($line === '' || $line[0] === '#') {
-            continue;
-        }
+use Dotenv\Dotenv;
 
-        [$name, $value] = array_pad(explode('=', $line, 2), 2, '');
-        $name = trim($name);
-        $value = trim($value, " \t\"'");
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-        if ($name === '' || getenv($name) !== false) {
-            continue;
-        }
-
-        putenv("$name=$value");
-        $_ENV[$name] = $value;
-    }
-}
-
-function env(string $key, string $default = ''): string
-{
-    $value = $_ENV[$key] ?? getenv($key);
-
-    if ($value === false || $value === null) {
-        return $default;
-    }
-
-    return (string) $value;
-}
-
-loadEnv(__DIR__ . '/.env');
+// Dependencias
 $pdo = new PDO(
     "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}",
     $_ENV['DB_USER'],
-    $_ENV['DB_PASSWORD']
+    $_ENV['DB_PASS']
 );
-
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $repositorio = new Infrastructure\RepositorioCitasMySQL($pdo);

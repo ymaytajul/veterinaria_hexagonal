@@ -16,6 +16,7 @@ return array(
     '7aed44d824e149ce152c0fb82af9379a' => $vendorDir . '/colinodell/json5/src/global.php',
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     'ea591e46ac6aa4e444b62c2a823e0484' => $vendorDir . '/sanmai/later/src/functions.php',
+    'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     '606a39d89246991a373564698c2d8383' => $vendorDir . '/symfony/polyfill-php85/bootstrap.php',
     'a1105708a18b76903365ca1c4aa61b02' => $vendorDir . '/symfony/translation/Resources/functions.php',
     '72243e5536b63e298acb6476f01f1aff' => $vendorDir . '/thecodingmachine/safe/lib/special_cases.php',
