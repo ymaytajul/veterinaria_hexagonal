@@ -51,15 +51,12 @@ function env(string $key, string $default = ''): string
 }
 
 loadEnv(__DIR__ . '/.env');
-
-$dsn = sprintf(
-    'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-    env('DB_HOST', 'localhost'),
-    env('DB_PORT', '3306'),
-    env('DB_NAME', 'veterinaria_hexagonal')
+$pdo = new PDO(
+    "mysql:host={$_ENV['DB_HOST']};port={$_ENV['DB_PORT']};dbname={$_ENV['DB_NAME']}",
+    $_ENV['DB_USER'],
+    $_ENV['DB_PASS']
 );
 
-$pdo = new PDO($dsn, env('DB_USER', 'root'), env('DB_PASSWORD'));
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $repositorio = new Infrastructure\RepositorioCitasMySQL($pdo);
