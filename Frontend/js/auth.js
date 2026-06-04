@@ -1,39 +1,37 @@
 /**
- * Sistema de Autenticacion - MODO HIBRIDO
- * 
- * - Admin: Conexion REAL a la base de datos (backend)
- * - Cliente: MODO MOCK (simulado) hasta que el backend este listo
+ * Sistema de Autenticacion - MODO DEMO COMPLETO
+ * NO necesita backend - funciona con localStorage
  */
 
 (function initAuth() {
     // ========================================
-    // CONFIGURACION
+    // MODO DEMO - Credenciales hardcodeadas
     // ========================================
-    const MOCK_MODE_FOR_CLIENT = true;  // Cliente usa mock, Admin usa backend real
-    
-    // Credenciales MOCK solo para cliente (admin va a la BD real)
-    const MOCK_CLIENT = {
+    const DEMO_USERS = {
+        'admin@vet.com': { 
+            password: 'admin123', 
+            role: 'admin', 
+            id: 1, 
+            name: 'Administrador',
+            token: 'demo-token-admin-123'
+        },
         'cliente@vet.com': { 
             password: 'cliente123', 
-            rol: 'cliente', 
+            role: 'cliente', 
             id: 2, 
-            nombre: 'Cliente Demo',
-            token: 'mock-token-cliente-456'
+            name: 'Cliente Demo',
+            token: 'demo-token-cliente-456'
         }
     };
     
-    // Obtener URL base
+    // Obtener URL base para redirecciones
     const path = window.location.pathname;
     const projectBase = path.includes('/Frontend/')
         ? path.split('/Frontend/')[0]
         : path.replace(/\/[^/]*$/, '');
     
     window.FRONTEND_BASE = `${projectBase}/Frontend`;
-    window.API_BASE = `${projectBase}/index.php`;
     
-    // ========================================
-    // CLASE PRINCIPAL DE AUTENTICACION
-    // ========================================
     class AuthManager {
         constructor() {
             this.init();
@@ -56,84 +54,40 @@
             this.updateUserUI();
         }
         
-        /**
-         * LOGIN - HIBRIDO: 
-         * - Si es admin: llama al backend real
-         * - Si es cliente: usa mock (por ahora)
-         */
         async login(email, password) {
             try {
                 this.showLoading(true);
                 
-                // ========================================
-                // DETECTAR SI ES CLIENTE (usar MOCK)
-                // ========================================
-                const isClientMock = MOCK_MODE_FOR_CLIENT && MOCK_CLIENT[email];
+                // Simular delay de red
+                await this.delay(600);
                 
-                if (isClientMock) {
-                    console.log('[MOCK] Login de CLIENTE - Simulado');
-                    await this.delay(500);
+                const user = DEMO_USERS[email];
+                
+                if (user && user.password === password) {
+                    // Guardar sesion
+                    localStorage.setItem('auth_token', user.token);
+                    localStorage.setItem('user_role', user.role);
+                    localStorage.setItem('user_id', user.id);
+                    localStorage.setItem('user_name', user.name);
                     
-                    const user = MOCK_CLIENT[email];
+                    this.showToast(`✅ Bienvenido, ${user.name}!`, 'success');
                     
-                    if (user && user.password === password) {
-                        localStorage.setItem('auth_token', user.token);
-                        localStorage.setItem('user_role', user.rol);
-                        localStorage.setItem('user_id', user.id);
-                        localStorage.setItem('user_name', user.nombre);
-                        
-                        this.showToast(`✅ Bienvenido, ${user.nombre}!`, 'success');
-                        
-                        setTimeout(() => {
+                    setTimeout(() => {
+                        if (user.role === 'admin') {
+                            window.location.href = `${window.FRONTEND_BASE}/admin/dashboard.html`;
+                        } else {
                             window.location.href = `${window.FRONTEND_BASE}/cliente/dashboard.html`;
-                        }, 500);
-                        return true;
-                    } else {
-                        this.showToast('❌ Credenciales de cliente incorrectas', 'error');
-                        return false;
-                    }
-                }
-                
-                // ========================================
-                // ADMIN: Conexion REAL al backend
-                // ========================================
-                console.log('[REAL] Login de ADMIN - Conectando a BD');
-                
-                const response = await fetch(`${window.API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok || !data.success) {
-                    const errorMsg = data.error || 'Credenciales incorrectas';
-                    this.showToast(errorMsg, 'error');
+                        }
+                    }, 500);
+                    return true;
+                } else {
+                    this.showToast('❌ Credenciales incorrectas', 'error');
                     return false;
                 }
                 
-                if (data.token) {
-                    localStorage.setItem('auth_token', data.token);
-                }
-                localStorage.setItem('user_role', data.rol);
-                localStorage.setItem('user_id', data.id);
-                localStorage.setItem('user_name', data.nombre || 'Administrador');
-                
-                this.showToast(`✅ Bienvenido, ${data.nombre || 'Administrador'}!`, 'success');
-                
-                setTimeout(() => {
-                    window.location.href = `${window.FRONTEND_BASE}/admin/dashboard.html`;
-                }, 500);
-                
-                return true;
-                
             } catch (error) {
                 console.error('Error en login:', error);
-                this.showToast('Error de conexion con el servidor', 'error');
+                this.showToast('Error de conexion', 'error');
                 return false;
             } finally {
                 this.showLoading(false);
@@ -173,16 +127,8 @@
             return this.getUserRole() === 'cliente';
         }
         
-        getToken() {
-            return localStorage.getItem('auth_token');
-        }
-        
         redirectToLogin() {
             window.location.href = `${window.FRONTEND_BASE}/login.html`;
-        }
-        
-        redirectToLanding() {
-            window.location.href = `${window.FRONTEND_BASE}/index.html`;
         }
         
         updateUserUI() {
@@ -204,13 +150,13 @@
             
             const toast = document.createElement('div');
             toast.className = `toast-message toast-${type}`;
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> <span>${message}</span>`;
             toast.style.cssText = `
                 position: fixed;
                 bottom: 24px;
                 right: 24px;
                 padding: 12px 20px;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                background: ${type === 'success' ? '#10b981' : '#ef4444'};
                 color: white;
                 border-radius: 12px;
                 font-size: 14px;
@@ -237,7 +183,6 @@
             }
             
             document.body.appendChild(toast);
-            
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(100%)';
